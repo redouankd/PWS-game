@@ -1,0 +1,144 @@
+[gd_scene format=3 uid="uid://cemhjpq754441"]
+
+[ext_resource type="Texture2D" uid="uid://caryacdi57yp0" path="res://assets/sprites/slime_purple.png" id="1_7l6y1"]
+[ext_resource type="Script" uid="uid://cfjw11alydor2" path="res://scripts/purple_slime.gd" id="1_p4tba"]
+[ext_resource type="Script" uid="uid://bfugy0mk1f143" path="res://scripts/health.gd" id="2_rwesy"]
+[ext_resource type="Script" uid="uid://dpaux1nmqdiem" path="res://scripts/hitbox_area.gd" id="4_o0hry"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rwesy"]
+atlas = ExtResource("1_7l6y1")
+region = Rect2(0, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p4tba"]
+atlas = ExtResource("1_7l6y1")
+region = Rect2(24, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o0hry"]
+atlas = ExtResource("1_7l6y1")
+region = Rect2(48, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_818gd"]
+atlas = ExtResource("1_7l6y1")
+region = Rect2(72, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p467k"]
+atlas = ExtResource("1_7l6y1")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5vw4l"]
+atlas = ExtResource("1_7l6y1")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kw5n6"]
+atlas = ExtResource("1_7l6y1")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4btqv"]
+atlas = ExtResource("1_7l6y1")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bf0kl"]
+atlas = ExtResource("1_7l6y1")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4veiw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rwesy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p4tba")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o0hry")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_818gd")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p467k")
+}],
+"loop": 1,
+"name": &"sleep",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5vw4l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kw5n6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4btqv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bf0kl")
+}],
+"loop": 1,
+"name": &"wake",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t5jri"]
+size = Vector2(10, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7lxti"]
+size = Vector2(10, 12)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4veiw"]
+radius = 102.0049
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4veiw"]
+size = Vector2(10, 11.5)
+
+[node name="purple_slime" type="CharacterBody2D" unique_id=133795221]
+script = ExtResource("1_p4tba")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=37681663]
+position = Vector2(0, -12)
+sprite_frames = SubResource("SpriteFrames_4veiw")
+animation = &"sleep"
+autoplay = "sleep"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1092769603]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_t5jri")
+
+[node name="Health" type="Node" parent="." unique_id=1098898146]
+script = ExtResource("2_rwesy")
+
+[node name="HitboxArea" type="Area2D" parent="." unique_id=1622834668]
+collision_layer = 4
+script = ExtResource("4_o0hry")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxArea" unique_id=265641471]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_7lxti")
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=1616548070]
+collision_layer = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1315017124]
+position = Vector2(0, -5)
+shape = SubResource("CircleShape2D_4veiw")
+
+[node name="attack_cooldown_timer" type="Timer" parent="." unique_id=1312683064]
+one_shot = true
+
+[node name="HurtboxArea" type="Area2D" parent="." unique_id=1964066663]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxArea" unique_id=1140253188]
+position = Vector2(0, -6.25)
+shape = SubResource("RectangleShape2D_4veiw")
+
+[node name="hitbox_timer" type="Timer" parent="." unique_id=1892708871]
+wait_time = 0.15
+one_shot = true

@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://bvble6gockjw4"]
+
+[ext_resource type="FontFile" uid="uid://vkql4h73ppav" path="res://assets/fonts/PixelOperator8.ttf" id="1_dj8aq"]
+[ext_resource type="Script" uid="uid://ba2ogr0ucax38" path="res://scripts/ui.gd" id="1_ro3t7"]
+[ext_resource type="FontFile" uid="uid://beowg2c3s24e" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="3_5en4g"]
+
+[sub_resource type="Theme" id="Theme_ro3t7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5en4g"]
+bg_color = Color(0.7988489, 0.06834382, 4.813075e-07, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_24e4x"]
+bg_color = Color(0, 0.83137256, 0, 1)
+
+[sub_resource type="Theme" id="Theme_5en4g"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w7enk"]
+bg_color = Color(0.8627451, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ukj8e"]
+bg_color = Color(0, 0.85490197, 0.19607843, 1)
+
+[node name="UI" type="CanvasLayer" unique_id=781763294]
+script = ExtResource("1_ro3t7")
+
+[node name="HealthBar" type="ProgressBar" parent="." unique_id=714687595]
+offset_left = 10.0
+offset_top = 22.0
+offset_right = 230.0
+offset_bottom = 42.0
+theme = SubResource("Theme_ro3t7")
+theme_override_fonts/font = ExtResource("1_dj8aq")
+theme_override_font_sizes/font_size = 5
+theme_override_styles/background = SubResource("StyleBoxFlat_5en4g")
+theme_override_styles/fill = SubResource("StyleBoxFlat_24e4x")
+step = 1.0
+show_percentage = false
+
+[node name="GameOverLabel" type="Label" parent="." unique_id=1375861311]
+visible = false
+offset_left = 350.0
+offset_top = 273.0
+offset_right = 798.0
+offset_bottom = 347.0
+theme_override_fonts/font = ExtResource("3_5en4g")
+theme_override_font_sizes/font_size = 73
+text = "Git Gud"
+
+[node name="BossHealthBar" type="ProgressBar" parent="." unique_id=114733245]
+visible = false
+offset_left = 121.0
+offset_top = 579.0
+offset_right = 1034.0
+offset_bottom = 604.0
+theme = SubResource("Theme_5en4g")
+theme_override_styles/background = SubResource("StyleBoxFlat_w7enk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ukj8e")
+max_value = 300.0
+step = 1.0
+show_percentage = false

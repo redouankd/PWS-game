@@ -1,0 +1,102 @@
+[gd_scene format=3 uid="uid://b56qp1lg1cl3n"]
+
+[ext_resource type="Texture2D" uid="uid://bv1417m42ngmk" path="res://assets/sprites/frank_de_kraai_projectile.png" id="1_q3m7n"]
+[ext_resource type="Script" uid="uid://cgpsjdah12k02" path="res://scripts/projectile.gd" id="1_softn"]
+[ext_resource type="Texture2D" uid="uid://bb8gauqojqj0c" path="res://assets/sprites/frank_de_kraai_projectile_impact.png" id="2_softn"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6q2a6"]
+atlas = ExtResource("1_q3m7n")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_byeak"]
+atlas = ExtResource("1_q3m7n")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jxwu6"]
+atlas = ExtResource("1_q3m7n")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w7nm8"]
+atlas = ExtResource("1_q3m7n")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6c2e5"]
+atlas = ExtResource("1_q3m7n")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pl1gp"]
+atlas = ExtResource("1_q3m7n")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ejmht"]
+atlas = ExtResource("2_softn")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_031o2"]
+atlas = ExtResource("2_softn")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xo60o"]
+atlas = ExtResource("2_softn")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4veiw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6q2a6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_byeak")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jxwu6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w7nm8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6c2e5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pl1gp")
+}],
+"loop": 1,
+"name": &"flying",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ejmht")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_031o2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xo60o")
+}],
+"loop": 0,
+"name": &"impact",
+"speed": 12.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4veiw"]
+radius = 6.0827627
+
+[node name="Projectile" type="Area2D" unique_id=215290840]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_softn")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=309343221]
+scale = Vector2(1.125, 1.125)
+sprite_frames = SubResource("SpriteFrames_4veiw")
+animation = &"flying"
+autoplay = "flying"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1265677802]
+position = Vector2(-0.6, 0.6)
+scale = Vector2(1.1, 1.1)
+shape = SubResource("CircleShape2D_4veiw")
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

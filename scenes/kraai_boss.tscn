@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://b6qfwjv4osn7k"]
+
+[ext_resource type="Texture2D" uid="uid://tfarp1ojaucl" path="res://assets/sprites/frank de kraai.png" id="1_pbyb4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_onnka"]
+atlas = ExtResource("1_pbyb4")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aoaa3"]
+atlas = ExtResource("1_pbyb4")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w4mq4"]
+atlas = ExtResource("1_pbyb4")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p78xw"]
+atlas = ExtResource("1_pbyb4")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_obo1w"]
+atlas = ExtResource("1_pbyb4")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5wuxk"]
+atlas = ExtResource("1_pbyb4")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xr6j4"]
+atlas = ExtResource("1_pbyb4")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f4ydx"]
+atlas = ExtResource("1_pbyb4")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4veiw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_onnka")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aoaa3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w4mq4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p78xw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_obo1w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5wuxk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xr6j4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f4ydx")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="Kraai boss" type="Node2D" unique_id=1495089711]
+
+[node name="Kraai boss" type="CharacterBody2D" parent="." unique_id=1906831201]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Kraai boss" unique_id=1721017288]
+scale = Vector2(2.8125, 2.75)
+sprite_frames = SubResource("SpriteFrames_4veiw")
+autoplay = "default"
+frame_progress = 0.1888349
