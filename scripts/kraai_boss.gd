@@ -82,8 +82,12 @@ func _ready():
 	player_ref = get_tree().get_first_node_in_group("player")
 	health.damaged.connect(_on_damaged)
 	health.died.connect(_on_died)
-	arena_bounds.body_entered.connect(_on_arena_body_entered)
-	arena_bounds.body_exited.connect(_on_arena_body_exited)
+
+	if not arena_bounds.body_entered.is_connected(_on_arena_body_entered):
+		arena_bounds.body_entered.connect(_on_arena_body_entered)
+	if not arena_bounds.body_exited.is_connected(_on_arena_body_exited):
+		arena_bounds.body_exited.connect(_on_arena_body_exited)
+
 	animated_sprite_2d.play("non_attack")
 
 

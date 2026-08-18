@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://bfugy0mk1f143" path="res://scripts/health.gd" id="2_rwesy"]
 [ext_resource type="Script" uid="uid://dpaux1nmqdiem" path="res://scripts/hitbox_area.gd" id="4_o0hry"]
 [ext_resource type="AudioStream" uid="uid://tcyjrx35nxm4" path="res://assets/sounds/Hitsound_Slime.mp3" id="5_818gd"]
+[ext_resource type="PackedScene" uid="uid://cxg7uxw3mh3dl" path="res://scenes/hit_spark.tscn" id="5_p467k"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vuyyj"]
 atlas = ExtResource("1_7l6y1")
@@ -250,6 +251,7 @@ position = Vector2(1, -6)
 collision_layer = 16
 collision_mask = 2
 script = ExtResource("4_o0hry")
+hit_spark_scene = ExtResource("5_p467k")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxArea" unique_id=265641471]
 shape = SubResource("RectangleShape2D_7lxti")

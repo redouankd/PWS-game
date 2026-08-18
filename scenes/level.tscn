@@ -525,6 +525,9 @@ shape = SubResource("RectangleShape2D_7lxti")
 sprite_frames = SubResource("SpriteFrames_4veiw")
 frame_progress = 0.065382265
 
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1240697437]
+color = Color(0.48430148, 0.48430148, 0.62040275, 1)
+
 [connection signal="body_exited" from="boss_cam_activator" to="boss_cam_activator" method="_on_body_exited"]
 [connection signal="body_shape_entered" from="boss_cam_activator" to="boss_cam_activator" method="_on_area_2d_body_shape_entered"]
 [connection signal="timeout" from="boss_cam_activator/boss cam timer" to="boss_cam_activator" method="_on_boss_cam_timer_timeout"]

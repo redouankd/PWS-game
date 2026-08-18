@@ -22,7 +22,8 @@ var current_state: State = State.IDLE
 @onready var hitbox_timer: Timer = $hitbox_timer
 @onready var hurt_timer: Timer = $hurt_timer
 @onready var health: Health = $Health
-@onready var camera: Camera2D = $Camera2D
+@onready var dash_trail: GPUParticles2D = $DashTrail
+@onready var player_cam: Camera2D = $player_cam
 
 # ---------- DASH VARIABLES ----------
 var can_dash = true
@@ -229,6 +230,7 @@ func start_dash() -> void:
 	dash_direction = -1 if animated_sprite.flip_h else 1
 	dash_timer.start()
 	dash_cooldown_timer.start()
+	dash_trail.emitting = true
 	if not is_on_floor():
 		has_air_dashed = true
 
@@ -242,6 +244,7 @@ func flash_hit() -> void:
 
 # ---------- SIGNALS ----------
 func _on_timer_timeout() -> void:
+	dash_trail.emitting = false
 	current_state = State.IDLE
 
 func _on_dash_cooldown_timer_timeout() -> void:
@@ -266,7 +269,7 @@ func _on_damaged(amount: int, knockback_dir: Vector2) -> void:
 	hurt_timer.start()
 	flash_hit()
 	var shake_strength = clamp(knockback_dir.length() / 20.0, 2.0, 8.0)
-	GameEffects.screen_shake(camera, shake_strength, 0.1)
+	GameEffects.screen_shake(player_cam, shake_strength, 0.1)
 
 func _on_died() -> void:
 	current_state = State.DEAD

@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://ep2qt4imybd0" path="res://assets/sprites/frank_de_kraai_full_sheet (1).png" id="3_ymidd"]
 [ext_resource type="Script" uid="uid://dpaux1nmqdiem" path="res://scripts/hitbox_area.gd" id="4_ql4hm"]
 [ext_resource type="AudioStream" uid="uid://4660p3x8uesx" path="res://assets/sounds/HitSound_Player.mp3" id="6_e4ijx"]
+[ext_resource type="PackedScene" uid="uid://cxg7uxw3mh3dl" path="res://scenes/hit_spark.tscn" id="7_lx236"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e4ijx"]
 atlas = ExtResource("3_ymidd")
@@ -285,6 +286,7 @@ position = Vector2(-12, 6)
 collision_layer = 16
 collision_mask = 2
 script = ExtResource("4_ql4hm")
+hit_spark_scene = ExtResource("7_lx236")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxArea" unique_id=912308702]
 shape = SubResource("RectangleShape2D_5en4g")

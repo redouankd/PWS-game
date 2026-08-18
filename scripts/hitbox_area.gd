@@ -4,6 +4,7 @@ extends Area2D
 @export var knockback_force: float = 250.0
 @export var hit_stop_duration: float = 0.06
 @export var hit_stop_scale: float = 0.05
+@export var hit_spark_scene: PackedScene
 var already_hit: Array = []
 
 func _ready() -> void:
@@ -34,3 +35,11 @@ func enable_hitbox() -> void:
 
 func disable_hitbox() -> void:
 	monitoring = false
+
+func spawn_hit_spark(pos: Vector2) -> void:
+	if hit_spark_scene == null:
+		return
+	var spark = hit_spark_scene.instantiate()
+	get_tree().current_scene.add_child(spark)
+	spark.global_position = pos
+	spark.trigger()
