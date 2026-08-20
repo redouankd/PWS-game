@@ -4,7 +4,7 @@ extends Area2D
 @export var knockback_force: float = 250.0
 @export var hit_stop_duration: float = 0.06
 @export var hit_stop_scale: float = 0.05
-@export var hit_spark_scene: PackedScene
+@export var stun_duration_on_deflect: float = 1.0
 var already_hit: Array = []
 
 func _ready() -> void:
@@ -25,9 +25,18 @@ func _try_damage(target: Node) -> void:
 		return
 	if target.has_node("Health"):
 		var direction = (target.global_position - get_owner().global_position).normalized()
-		target.get_node("Health").take_damage(damage, direction * knockback_force)
+		var target_health = target.get_node("Health")
+
+		if not target_health.perfectly_deflected.is_connected(_on_deflected):
+			target_health.perfectly_deflected.connect(_on_deflected)
+
+		target_health.take_damage(damage, direction * knockback_force, get_owner(), 0)  # 0 = MELEE
 		already_hit.append(target)
 		GameEffects.hit_stop(hit_stop_duration, hit_stop_scale)
+
+func _on_deflected(source: Node, attack_type: int) -> void:
+	if source == get_owner() and attack_type == 0 and get_owner().has_method("apply_stun"):
+		get_owner().apply_stun(stun_duration_on_deflect)
 
 func enable_hitbox() -> void:
 	already_hit.clear()
@@ -35,11 +44,3 @@ func enable_hitbox() -> void:
 
 func disable_hitbox() -> void:
 	monitoring = false
-
-func spawn_hit_spark(pos: Vector2) -> void:
-	if hit_spark_scene == null:
-		return
-	var spark = hit_spark_scene.instantiate()
-	get_tree().current_scene.add_child(spark)
-	spark.global_position = pos
-	spark.trigger()

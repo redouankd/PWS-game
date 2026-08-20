@@ -10,6 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://bvble6gockjw4" path="res://scenes/UI.tscn" id="8_b121j"]
 [ext_resource type="Script" uid="uid://dld51fst1hnbt" path="res://scripts/dubble_jump_pickup.gd" id="9_8c41q"]
 [ext_resource type="Texture2D" uid="uid://l3pepj1rjptf" path="res://assets/sprites/coin.png" id="10_olg7q"]
+[ext_resource type="PackedScene" uid="uid://by5dhqm1vp32h" path="res://scenes/torch.tscn" id="11_t1rx8"]
+[ext_resource type="PackedScene" uid="uid://cdv5go86t43k5" path="res://scenes/heart.tscn" id="12_8iemx"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_oi3di"]
 texture = ExtResource("1_klq6b")
@@ -527,6 +529,15 @@ frame_progress = 0.065382265
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1240697437]
 color = Color(0.48430148, 0.48430148, 0.62040275, 1)
+
+[node name="torch" parent="." unique_id=1312971 instance=ExtResource("11_t1rx8")]
+position = Vector2(-1277, 354)
+
+[node name="torch2" parent="." unique_id=762316663 instance=ExtResource("11_t1rx8")]
+position = Vector2(-867, 364)
+
+[node name="Heart" parent="." unique_id=950701358 instance=ExtResource("12_8iemx")]
+position = Vector2(-1152, 437)
 
 [connection signal="body_exited" from="boss_cam_activator" to="boss_cam_activator" method="_on_body_exited"]
 [connection signal="body_shape_entered" from="boss_cam_activator" to="boss_cam_activator" method="_on_area_2d_body_shape_entered"]

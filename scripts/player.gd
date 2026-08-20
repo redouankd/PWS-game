@@ -7,11 +7,22 @@ const SPEED = 140.0
 const JUMP_VELOCITY = -330.0
 const JUMP_CUT_MULTIPLIER = 0.5
 const DASH_SPEED = 300
-const WALL_SLIDE_SPEED = 60.0
-const WALL_JUMP_VELOCITY = Vector2(220.0, -300.0)
+const COYOTE_TIME = 0.1
+const JUMP_BUFFER_TIME = 0.1
+const WALL_JUMP_VELOCITY = Vector2(100.0, -260.0)
+const WALL_JUMP_LOCKOUT = 0.13
+const WALL_JUMP_CONTROL_LOCK = 0.13
+
+# ---------- DEFLECT / BLOCK ----------
+enum { NOT_BLOCKING, PERFECT_WINDOW, LATE_BLOCK }
+const PERFECT_DEFLECT_WINDOW = 0.15
+const LATE_BLOCK_DAMAGE_REDUCTION = 0.5
+const LATE_BLOCK_CHIP_DAMAGE = 3
+
+var block_timer: float = 0.0
 
 # ---------- STATE MACHINE ----------
-enum State { IDLE, RUN, JUMP, DASH, ATTACK, HURT, DEAD, WALL_CLING }
+enum State { IDLE, RUN, JUMP, DASH, ATTACK, HURT, DEAD, WALL_CLING, BLOCK }
 var current_state: State = State.IDLE
 
 # ---------- NODES ----------
@@ -22,8 +33,7 @@ var current_state: State = State.IDLE
 @onready var hitbox_timer: Timer = $hitbox_timer
 @onready var hurt_timer: Timer = $hurt_timer
 @onready var health: Health = $Health
-@onready var dash_trail: GPUParticles2D = $DashTrail
-@onready var player_cam: Camera2D = $player_cam
+@onready var camera: Camera2D = $player_cam
 
 # ---------- DASH VARIABLES ----------
 var can_dash = true
@@ -41,21 +51,26 @@ var knockback_velocity: Vector2 = Vector2.ZERO
 var has_double_jumped: bool = false
 
 # ---------- WALL CLING ----------
-var wall_direction: int = 0  # -1 = wall on left, 1 = wall on right, 0 = no wall
+var wall_direction: int = 0
+var wall_jump_lockout_timer: float = 0.0
+var wall_jump_control_timer: float = 0.0
+
+# ---------- JUMP FORGIVENESS ----------
+var coyote_timer: float = 0.0
+var jump_buffer_timer: float = 0.0
 
 
 func _ready() -> void:
 	add_to_group("player")
 	health.damaged.connect(_on_damaged)
 	health.died.connect(_on_died)
-	print("PlayerStats loaded: ", PlayerStats)
-	print("Has double_jump: ", PlayerStats.has_ability("double_jump"))
-	print("Has wall_climb: ", PlayerStats.has_ability("wall_climb"))
-
+	if health.has_signal("perfectly_deflected"):
+		health.perfectly_deflected.connect(_on_perfectly_deflected)
 
 
 func _physics_process(delta: float) -> void:
 	apply_gravity(delta)
+	update_jump_timers(delta)
 	handle_state_transitions()
 	run_current_state(delta)
 	update_animation()
@@ -74,7 +89,27 @@ func apply_gravity(delta: float) -> void:
 		velocity.y *= JUMP_CUT_MULTIPLIER
 
 
+func update_jump_timers(delta: float) -> void:
+	if is_on_floor():
+		coyote_timer = COYOTE_TIME
+	else:
+		coyote_timer -= delta
+
+	if Input.is_action_just_pressed("jump"):
+		jump_buffer_timer = JUMP_BUFFER_TIME
+	else:
+		jump_buffer_timer -= delta
+
+	if wall_jump_lockout_timer > 0:
+		wall_jump_lockout_timer -= delta
+
+	if wall_jump_control_timer > 0:
+		wall_jump_control_timer -= delta
+
+
 func is_touching_wall_for_cling() -> bool:
+	if wall_jump_lockout_timer > 0:
+		return false
 	if not PlayerStats.has_ability("wall_climb"):
 		return false
 	if is_on_floor():
@@ -84,8 +119,6 @@ func is_touching_wall_for_cling() -> bool:
 
 	var direction := Input.get_axis("move_left", "move_right")
 	var normal = get_wall_normal()
-	# normal points AWAY from the wall, so pressing INTO the wall means
-	# direction is opposite sign of normal.x
 	if normal.x > 0 and direction < 0:
 		return true
 	if normal.x < 0 and direction > 0:
@@ -93,57 +126,85 @@ func is_touching_wall_for_cling() -> bool:
 	return false
 
 
+func get_deflect_state() -> int:
+	if current_state != State.BLOCK:
+		return NOT_BLOCKING
+	if block_timer <= PERFECT_DEFLECT_WINDOW:
+		return PERFECT_WINDOW
+	return LATE_BLOCK
+
+
 func handle_state_transitions() -> void:
-	if current_state == State.HURT or current_state == State.ATTACK or current_state == State.DEAD:
+	if current_state == State.HURT or current_state == State.DEAD or current_state == State.DASH:
 		return
 
 	var direction := Input.get_axis("move_left", "move_right")
 	var can_dash_now = can_dash and (is_on_floor() or not has_air_dashed)
 
-	# Wall cling takes priority when airborne and pressing into a wall
+	if current_state == State.ATTACK:
+		if Input.is_action_just_pressed("dash") and can_dash_now:
+			hitbox_area.disable_hitbox()
+			start_dash()
+			return
+		return
+
+	# Block — held, not just pressed
+	if Input.is_action_pressed("block") and is_on_floor():
+		if current_state != State.BLOCK:
+			block_timer = 0.0
+			print("Block started")
+		current_state = State.BLOCK
+		return
+	elif current_state == State.BLOCK:
+		print("Block released")
+		current_state = State.IDLE
+
+	if current_state == State.WALL_CLING:
+		if jump_buffer_timer > 0:
+			velocity.x = WALL_JUMP_VELOCITY.x * -wall_direction
+			velocity.y = WALL_JUMP_VELOCITY.y
+			has_double_jumped = false
+			jump_buffer_timer = 0
+			wall_jump_lockout_timer = WALL_JUMP_LOCKOUT
+			wall_jump_control_timer = WALL_JUMP_CONTROL_LOCK
+			current_state = State.JUMP
+			return
+		if is_on_floor():
+			current_state = State.JUMP
+		elif not is_touching_wall_for_cling():
+			current_state = State.JUMP
+		else:
+			return
+
 	if is_touching_wall_for_cling():
+		if current_state != State.WALL_CLING:
+			has_double_jumped = false
 		current_state = State.WALL_CLING
 		wall_direction = 1 if get_wall_normal().x < 0 else -1
 		return
-
-	if current_state == State.WALL_CLING:
-		# Wall jump
-		if Input.is_action_just_pressed("jump"):
-			if is_on_floor():
-				velocity.y = JUMP_VELOCITY
-				current_state = State.JUMP
-				return
-			elif PlayerStats.has_ability("double_jump") and not has_double_jumped:
-				print("Double jump triggered")
-				velocity.y = JUMP_VELOCITY
-				has_double_jumped = true
-				current_state = State.JUMP
-				return
-			else:
-				print("Jump blocked — has ability: ", PlayerStats.has_ability("double_jump"), " already double jumped: ", has_double_jumped)
 
 	if Input.is_action_just_pressed("attack"):
 		current_state = State.ATTACK
 		attack_hitbox_triggered = false
 		return
 
-	if Input.is_action_just_pressed("dash") and can_dash_now and PlayerStats.has_ability("dash"):
+	if Input.is_action_just_pressed("dash") and can_dash_now:
 		start_dash()
 		return
 
-	if Input.is_action_just_pressed("jump"):
-		if is_on_floor():
+	if jump_buffer_timer > 0:
+		if is_on_floor() or coyote_timer > 0:
 			velocity.y = JUMP_VELOCITY
+			coyote_timer = 0
+			jump_buffer_timer = 0
 			current_state = State.JUMP
 			return
 		elif PlayerStats.has_ability("double_jump") and not has_double_jumped:
 			velocity.y = JUMP_VELOCITY
 			has_double_jumped = true
+			jump_buffer_timer = 0
 			current_state = State.JUMP
 			return
-
-	if current_state == State.DASH:
-		return
 
 	if not is_on_floor():
 		current_state = State.JUMP
@@ -164,7 +225,9 @@ func run_current_state(delta: float) -> void:
 			face_direction(direction)
 
 		State.JUMP:
-			if direction != 0:
+			if wall_jump_control_timer > 0:
+				pass
+			elif direction != 0:
 				velocity.x = direction * SPEED
 				face_direction(direction)
 			else:
@@ -188,8 +251,16 @@ func run_current_state(delta: float) -> void:
 
 		State.WALL_CLING:
 			velocity.x = 0
-			velocity.y = min(velocity.y, WALL_SLIDE_SPEED)  # slow, capped slide down
+			velocity.y = 0
 			animated_sprite.flip_h = wall_direction < 0
+
+		State.BLOCK:
+			velocity.x = move_toward(velocity.x, 0, SPEED)
+			block_timer += delta
+			if block_timer <= PERFECT_DEFLECT_WINDOW:
+				print("Perfect window active — t=", block_timer)
+			else:
+				print("Late block — t=", block_timer)
 
 		State.DEAD:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
@@ -211,6 +282,9 @@ func update_animation() -> void:
 			animated_sprite.play("hurt")
 		State.WALL_CLING:
 			animated_sprite.play("wall_cling")
+		State.BLOCK:
+			if animated_sprite.animation != "block":
+				animated_sprite.play("block")
 		State.DEAD:
 			pass
 
@@ -230,7 +304,6 @@ func start_dash() -> void:
 	dash_direction = -1 if animated_sprite.flip_h else 1
 	dash_timer.start()
 	dash_cooldown_timer.start()
-	dash_trail.emitting = true
 	if not is_on_floor():
 		has_air_dashed = true
 
@@ -242,9 +315,16 @@ func flash_hit() -> void:
 	tween.tween_property(animated_sprite, "modulate", Color(1, 1, 1, 1), 0.1)
 
 
+func flash_perfect_parry() -> void:
+	var tween = create_tween()
+	animated_sprite.modulate = Color(1, 1, 1, 1)
+	tween.tween_property(animated_sprite, "modulate", Color(2.5, 2.5, 6, 1), 0.04)
+	tween.tween_property(animated_sprite, "modulate", Color(0.5, 0.5, 2, 1), 0.08)
+	tween.tween_property(animated_sprite, "modulate", Color(1, 1, 1, 1), 0.15)
+
+
 # ---------- SIGNALS ----------
 func _on_timer_timeout() -> void:
-	dash_trail.emitting = false
 	current_state = State.IDLE
 
 func _on_dash_cooldown_timer_timeout() -> void:
@@ -269,7 +349,13 @@ func _on_damaged(amount: int, knockback_dir: Vector2) -> void:
 	hurt_timer.start()
 	flash_hit()
 	var shake_strength = clamp(knockback_dir.length() / 20.0, 2.0, 8.0)
-	GameEffects.screen_shake(player_cam, shake_strength, 0.1)
+	GameEffects.screen_shake(camera, shake_strength, 0.1)
+
+func _on_perfectly_deflected(source: Node, attack_type: int) -> void:
+	print("PERFECT DEFLECT! Source: ", source, " type: ", attack_type)
+	flash_perfect_parry()
+	GameEffects.hit_stop(0.15, 0.02)
+	GameEffects.screen_shake(camera, 6.0, 0.15)
 
 func _on_died() -> void:
 	current_state = State.DEAD

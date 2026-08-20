@@ -138,6 +138,16 @@ func flash_hit() -> void:
 	tween.tween_property(animated_sprite, "modulate", Color(4, 4, 4, 1), 0.05)
 	tween.tween_property(animated_sprite, "modulate", Color(1, 1, 1, 1), 0.1)
 
+func apply_stun(duration: float) -> void:
+	current_state = State.HURT
+	if player_ref != null:
+		var direction_away = (global_position - player_ref.global_position).normalized()
+		knockback_velocity = direction_away * 100.0
+	else:
+		knockback_velocity = Vector2.ZERO
+	hurt_timer.wait_time = duration
+	hurt_timer.start()
+	flash_hit()
 
 # ---------- SIGNALS ----------
 func _on_hitbox_timer_timeout() -> void:
