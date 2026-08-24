@@ -75,6 +75,7 @@ func _physics_process(delta: float) -> void:
 	run_current_state(delta)
 	update_animation()
 	move_and_slide()
+	print(global_position)
 
 
 func apply_gravity(delta: float) -> void:
@@ -365,3 +366,7 @@ func _on_died() -> void:
 	animated_sprite.play("death")
 	await animated_sprite.animation_finished
 	player_died.emit()
+
+
+func _on_body_entered(body: Node2D) -> void:
+	pass # Replace with function body.

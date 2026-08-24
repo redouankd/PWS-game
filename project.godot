@@ -25,6 +25,10 @@ PlayerStats="*uid://d2m5b228xakl5"
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/project-time-tracker/plugin.cfg")
+
 [global_group]
 
 player=""
