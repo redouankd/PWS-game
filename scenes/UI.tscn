@@ -2,6 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://vkql4h73ppav" path="res://assets/fonts/PixelOperator8.ttf" id="1_dj8aq"]
 [ext_resource type="Script" uid="uid://ba2ogr0ucax38" path="res://scripts/ui.gd" id="1_ro3t7"]
+[ext_resource type="Script" uid="uid://iy3ph1et3f7f" path="res://scripts/transition_fade.gd" id="2_ua6yw"]
 [ext_resource type="FontFile" uid="uid://beowg2c3s24e" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="3_5en4g"]
 
 [sub_resource type="Theme" id="Theme_ro3t7"]
@@ -58,3 +59,13 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_ukj8e")
 max_value = 300.0
 step = 1.0
 show_percentage = false
+
+[node name="TransitionFade" type="ColorRect" parent="." unique_id=957100396]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+script = ExtResource("2_ua6yw")

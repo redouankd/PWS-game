@@ -33,6 +33,7 @@ enabled=PackedStringArray("res://addons/project-time-tracker/plugin.cfg")
 
 player=""
 player_health=""
+ui=""
 
 [input]
 

@@ -9,6 +9,7 @@ extends CanvasLayer
 @export var boss_health: Health
 
 func _ready() -> void:
+	add_to_group("ui")
 	game_over_label.visible = false
 	boss_health_bar.visible = false
 

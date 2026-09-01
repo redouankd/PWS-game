@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://72xgdliya1a2" path="res://assets/sprites/knight.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://cl58wd4v4c5hi" path="res://scripts/player.gd" id="1_g2els"]
+[ext_resource type="Script" uid="uid://dgf1n6sku06mo" path="res://scripts/player_cam.gd" id="2_fjrip"]
 [ext_resource type="Texture2D" uid="uid://cokgigcx0djfd" path="res://assets/sprites/knight2.png" id="2_qlg0r"]
 [ext_resource type="Script" uid="uid://dpaux1nmqdiem" path="res://scripts/hitbox_area.gd" id="3_qhqgy"]
 [ext_resource type="Script" uid="uid://bfugy0mk1f143" path="res://scripts/health.gd" id="4_dqkch"]
@@ -405,11 +406,14 @@ script = ExtResource("1_g2els")
 position = Vector2(0, -10)
 zoom = Vector2(3, 3)
 limit_left = -972
-limit_top = 270
 limit_right = -124
-limit_bottom = 190
 limit_smoothed = true
 position_smoothing_enabled = true
+position_smoothing_speed = 6.0
+drag_vertical_enabled = true
+drag_top_margin = 0.35
+drag_bottom_margin = 0.35
+script = ExtResource("2_fjrip")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=277076006]
 position = Vector2(0, -16)

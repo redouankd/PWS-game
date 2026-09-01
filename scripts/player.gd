@@ -12,6 +12,7 @@ const JUMP_BUFFER_TIME = 0.1
 const WALL_JUMP_VELOCITY = Vector2(100.0, -260.0)
 const WALL_JUMP_LOCKOUT = 0.13
 const WALL_JUMP_CONTROL_LOCK = 0.13
+const ATTACK_COOLDOWN = 0.1
 
 # ---------- DEFLECT / BLOCK ----------
 enum { NOT_BLOCKING, PERFECT_WINDOW, LATE_BLOCK }
@@ -42,6 +43,7 @@ var has_air_dashed = false
 
 # ---------- ATTACK VARIABLES ----------
 var attack_hitbox_triggered = false
+var attack_cooldown_timer_value: float = 0.0
 @export var hitbox_offset_x: float = 12.0
 
 # ---------- HURT / KNOCKBACK ----------
@@ -75,8 +77,8 @@ func _physics_process(delta: float) -> void:
 	run_current_state(delta)
 	update_animation()
 	move_and_slide()
-	print(global_position)
-
+	if current_state == State.ATTACK:
+		print("In ATTACK — anim: ", animated_sprite.animation, " triggered: ", attack_hitbox_triggered)
 
 func apply_gravity(delta: float) -> void:
 	if not is_on_floor():
@@ -106,6 +108,9 @@ func update_jump_timers(delta: float) -> void:
 
 	if wall_jump_control_timer > 0:
 		wall_jump_control_timer -= delta
+
+	if attack_cooldown_timer_value > 0:
+		attack_cooldown_timer_value -= delta
 
 
 func is_touching_wall_for_cling() -> bool:
@@ -149,15 +154,12 @@ func handle_state_transitions() -> void:
 			return
 		return
 
-	# Block — held, not just pressed
 	if Input.is_action_pressed("block") and is_on_floor():
 		if current_state != State.BLOCK:
 			block_timer = 0.0
-			print("Block started")
 		current_state = State.BLOCK
 		return
 	elif current_state == State.BLOCK:
-		print("Block released")
 		current_state = State.IDLE
 
 	if current_state == State.WALL_CLING:
@@ -184,7 +186,8 @@ func handle_state_transitions() -> void:
 		wall_direction = 1 if get_wall_normal().x < 0 else -1
 		return
 
-	if Input.is_action_just_pressed("attack"):
+	if Input.is_action_just_pressed("attack") and attack_cooldown_timer_value <= 0:
+		print("New attack started, state was: ", current_state)
 		current_state = State.ATTACK
 		attack_hitbox_triggered = false
 		return
@@ -258,10 +261,6 @@ func run_current_state(delta: float) -> void:
 		State.BLOCK:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 			block_timer += delta
-			if block_timer <= PERFECT_DEFLECT_WINDOW:
-				print("Perfect window active — t=", block_timer)
-			else:
-				print("Late block — t=", block_timer)
 
 		State.DEAD:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
@@ -278,7 +277,8 @@ func update_animation() -> void:
 		State.DASH:
 			animated_sprite.play("dash")
 		State.ATTACK:
-			animated_sprite.play("attack_1")
+			if animated_sprite.animation != "attack_1":
+				animated_sprite.play("attack_1")
 		State.HURT:
 			animated_sprite.play("hurt")
 		State.WALL_CLING:
@@ -335,8 +335,10 @@ func _on_hitbox_timer_timeout() -> void:
 	hitbox_area.disable_hitbox()
 
 func _on_animated_sprite_2d_animation_finished() -> void:
+	print("Animation finished — current animation: ", animated_sprite.animation, " state: ", current_state)
 	if current_state == State.ATTACK:
 		current_state = State.IDLE
+		attack_cooldown_timer_value = ATTACK_COOLDOWN
 
 func _on_hurt_timer_timeout() -> void:
 	if current_state != State.DEAD:
@@ -353,7 +355,6 @@ func _on_damaged(amount: int, knockback_dir: Vector2) -> void:
 	GameEffects.screen_shake(camera, shake_strength, 0.1)
 
 func _on_perfectly_deflected(source: Node, attack_type: int) -> void:
-	print("PERFECT DEFLECT! Source: ", source, " type: ", attack_type)
 	flash_perfect_parry()
 	GameEffects.hit_stop(0.15, 0.02)
 	GameEffects.screen_shake(camera, 6.0, 0.15)
@@ -366,7 +367,3 @@ func _on_died() -> void:
 	animated_sprite.play("death")
 	await animated_sprite.animation_finished
 	player_died.emit()
-
-
-func _on_body_entered(body: Node2D) -> void:
-	pass # Replace with function body.
