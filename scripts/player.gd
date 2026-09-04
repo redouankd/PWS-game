@@ -199,7 +199,8 @@ func handle_state_transitions() -> void:
 	if Input.is_action_just_pressed("attack") and attack_cooldown_timer_value <= 0:
 		current_state = State.ATTACK
 		attack_hitbox_triggered = false
-
+		poepietime()
+		
 		if not is_on_floor() and Input.is_action_pressed("move_down"):
 			attack_direction = "down"
 			print("DOWN STRIKE triggered")
@@ -359,6 +360,10 @@ func flash_perfect_parry() -> void:
 	tween.tween_property(animated_sprite, "modulate", Color(0.5, 0.5, 2, 1), 0.08)
 	tween.tween_property(animated_sprite, "modulate", Color(1, 1, 1, 1), 0.15)
 
+func poepietime():
+	var randi_output = randi_range(25, 50)
+	print(randi_output)
+	
 
 # ---------- SIGNALS ----------
 func _on_timer_timeout() -> void:
