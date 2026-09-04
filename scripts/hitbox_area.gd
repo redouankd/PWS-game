@@ -1,5 +1,7 @@
 extends Area2D
 
+signal hit_landed
+
 @export var damage: int = 10
 @export var knockback_force: float = 250.0
 @export var hit_stop_duration: float = 0.06
@@ -30,9 +32,10 @@ func _try_damage(target: Node) -> void:
 		if not target_health.perfectly_deflected.is_connected(_on_deflected):
 			target_health.perfectly_deflected.connect(_on_deflected)
 
-		target_health.take_damage(damage, direction * knockback_force, get_owner(), 0)  # 0 = MELEE
+		target_health.take_damage(damage, direction * knockback_force, get_owner(), 0)
 		already_hit.append(target)
 		GameEffects.hit_stop(hit_stop_duration, hit_stop_scale)
+		hit_landed.emit()
 
 func _on_deflected(source: Node, attack_type: int) -> void:
 	if source == get_owner() and attack_type == 0 and get_owner().has_method("apply_stun"):

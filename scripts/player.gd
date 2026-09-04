@@ -14,6 +14,11 @@ const WALL_JUMP_LOCKOUT = 0.13
 const WALL_JUMP_CONTROL_LOCK = 0.13
 const ATTACK_COOLDOWN = 0.1
 
+# ---------- DOWN / UP STRIKE ----------
+const POGO_BOUNCE_MULTIPLIER = 0.85
+const POGO_MIN_BOUNCE = -200.0
+const POGO_MAX_BOUNCE = -420.0
+
 # ---------- DEFLECT / BLOCK ----------
 enum { NOT_BLOCKING, PERFECT_WINDOW, LATE_BLOCK }
 const PERFECT_DEFLECT_WINDOW = 0.15
@@ -31,6 +36,8 @@ var current_state: State = State.IDLE
 @onready var dash_cooldown_timer: Timer = $dash_cooldown_timer
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var hitbox_area: Area2D = $HitboxArea
+@onready var down_hitbox_area: Area2D = $DownHitboxArea
+@onready var up_hitbox_area: Area2D = $UpHitboxArea
 @onready var hitbox_timer: Timer = $hitbox_timer
 @onready var hurt_timer: Timer = $hurt_timer
 @onready var health: Health = $Health
@@ -44,6 +51,7 @@ var has_air_dashed = false
 # ---------- ATTACK VARIABLES ----------
 var attack_hitbox_triggered = false
 var attack_cooldown_timer_value: float = 0.0
+var attack_direction: String = "side"
 @export var hitbox_offset_x: float = 12.0
 
 # ---------- HURT / KNOCKBACK ----------
@@ -68,6 +76,7 @@ func _ready() -> void:
 	health.died.connect(_on_died)
 	if health.has_signal("perfectly_deflected"):
 		health.perfectly_deflected.connect(_on_perfectly_deflected)
+	down_hitbox_area.hit_landed.connect(_on_pogo_hit)
 
 
 func _physics_process(delta: float) -> void:
@@ -77,8 +86,7 @@ func _physics_process(delta: float) -> void:
 	run_current_state(delta)
 	update_animation()
 	move_and_slide()
-	if current_state == State.ATTACK:
-		print("In ATTACK — anim: ", animated_sprite.animation, " triggered: ", attack_hitbox_triggered)
+
 
 func apply_gravity(delta: float) -> void:
 	if not is_on_floor():
@@ -150,6 +158,8 @@ func handle_state_transitions() -> void:
 	if current_state == State.ATTACK:
 		if Input.is_action_just_pressed("dash") and can_dash_now:
 			hitbox_area.disable_hitbox()
+			down_hitbox_area.disable_hitbox()
+			up_hitbox_area.disable_hitbox()
 			start_dash()
 			return
 		return
@@ -187,9 +197,18 @@ func handle_state_transitions() -> void:
 		return
 
 	if Input.is_action_just_pressed("attack") and attack_cooldown_timer_value <= 0:
-		print("New attack started, state was: ", current_state)
 		current_state = State.ATTACK
 		attack_hitbox_triggered = false
+
+		if not is_on_floor() and Input.is_action_pressed("move_down"):
+			attack_direction = "down"
+			print("DOWN STRIKE triggered")
+		elif Input.is_action_pressed("move_up"):
+			attack_direction = "up"
+			print("UP STRIKE triggered")
+		else:
+			attack_direction = "side"
+
 		return
 
 	if Input.is_action_just_pressed("dash") and can_dash_now:
@@ -246,7 +265,13 @@ func run_current_state(delta: float) -> void:
 				face_direction(direction)
 			if not attack_hitbox_triggered:
 				attack_hitbox_triggered = true
-				hitbox_area.enable_hitbox()
+				match attack_direction:
+					"down":
+						down_hitbox_area.enable_hitbox()
+					"up":
+						up_hitbox_area.enable_hitbox()
+					_:
+						hitbox_area.enable_hitbox()
 				hitbox_timer.start()
 
 		State.HURT:
@@ -266,6 +291,16 @@ func run_current_state(delta: float) -> void:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 
 
+func get_attack_animation() -> String:
+	match attack_direction:
+		"down":
+			return "attack_down"
+		"up":
+			return "attack_up"
+		_:
+			return "attack_1"
+
+
 func update_animation() -> void:
 	match current_state:
 		State.IDLE:
@@ -277,8 +312,9 @@ func update_animation() -> void:
 		State.DASH:
 			animated_sprite.play("dash")
 		State.ATTACK:
-			if animated_sprite.animation != "attack_1":
-				animated_sprite.play("attack_1")
+			var anim_name = get_attack_animation()
+			if animated_sprite.animation != anim_name:
+				animated_sprite.play(anim_name)
 		State.HURT:
 			animated_sprite.play("hurt")
 		State.WALL_CLING:
@@ -333,9 +369,10 @@ func _on_dash_cooldown_timer_timeout() -> void:
 
 func _on_hitbox_timer_timeout() -> void:
 	hitbox_area.disable_hitbox()
+	down_hitbox_area.disable_hitbox()
+	up_hitbox_area.disable_hitbox()
 
 func _on_animated_sprite_2d_animation_finished() -> void:
-	print("Animation finished — current animation: ", animated_sprite.animation, " state: ", current_state)
 	if current_state == State.ATTACK:
 		current_state = State.IDLE
 		attack_cooldown_timer_value = ATTACK_COOLDOWN
@@ -359,9 +396,17 @@ func _on_perfectly_deflected(source: Node, attack_type: int) -> void:
 	GameEffects.hit_stop(0.15, 0.02)
 	GameEffects.screen_shake(camera, 6.0, 0.15)
 
+func _on_pogo_hit() -> void:
+	var bounce = clamp(velocity.y * -POGO_BOUNCE_MULTIPLIER, POGO_MAX_BOUNCE, POGO_MIN_BOUNCE)
+	velocity.y = bounce
+	current_state = State.JUMP
+	has_double_jumped = false
+
 func _on_died() -> void:
 	current_state = State.DEAD
 	hitbox_area.monitoring = false
+	down_hitbox_area.monitoring = false
+	up_hitbox_area.monitoring = false
 	velocity = Vector2.ZERO
 	set_physics_process(false)
 	animated_sprite.play("death")

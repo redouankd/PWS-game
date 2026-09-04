@@ -575,7 +575,7 @@ tile_set = SubResource("TileSet_t5jri")
 collision_enabled = false
 
 [node name="Player" parent="." unique_id=1843453978 groups=["player"] instance=ExtResource("2_b121j")]
-position = Vector2(1877, -78)
+position = Vector2(-23, 27)
 
 [node name="boss_cam" type="Camera2D" parent="." unique_id=429079067]
 position = Vector2(2589, -1)
