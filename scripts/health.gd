@@ -16,6 +16,10 @@ func take_damage(amount: int, knockback_dir: Vector2 = Vector2.ZERO, source: Nod
 		return
 
 	var owner_node = get_parent()
+
+	if owner_node.has_method("is_currently_invincible") and owner_node.is_currently_invincible():
+		return
+
 	if owner_node.has_method("get_deflect_state"):
 		var deflect_result = owner_node.get_deflect_state()
 		if deflect_result == owner_node.PERFECT_WINDOW:

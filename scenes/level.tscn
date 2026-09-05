@@ -853,6 +853,17 @@ spawn_point = NodePath("../../Room_C/SpawnPoint")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Room_B/B_To_C" unique_id=838505740]
 shape = SubResource("RectangleShape2D_fpun6")
 
+[node name="B_To_C2" type="Area2D" parent="Room_B" unique_id=26628433 node_paths=PackedStringArray("spawn_point")]
+position = Vector2(-1208, -42)
+collision_layer = 32
+collision_mask = 2
+script = ExtResource("14_fpun6")
+new_camera_limits = Rect2(1269, 0, 670, 0)
+spawn_point = NodePath("../../Room_C/SpawnPoint")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room_B/B_To_C2" unique_id=1678057152]
+shape = SubResource("RectangleShape2D_fpun6")
+
 [node name="SpawnPoint_Right" type="Marker2D" parent="Room_B" unique_id=710547127]
 position = Vector2(746, -26)
 

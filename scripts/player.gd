@@ -13,6 +13,7 @@ const WALL_JUMP_VELOCITY = Vector2(100.0, -260.0)
 const WALL_JUMP_LOCKOUT = 0.13
 const WALL_JUMP_CONTROL_LOCK = 0.13
 const ATTACK_COOLDOWN = 0.1
+const INVINCIBILITY_DURATION = 0.8
 
 # ---------- DOWN / UP STRIKE ----------
 const POGO_BOUNCE_MULTIPLIER = 0.85
@@ -56,6 +57,10 @@ var attack_direction: String = "side"
 
 # ---------- HURT / KNOCKBACK ----------
 var knockback_velocity: Vector2 = Vector2.ZERO
+
+# ---------- INVINCIBILITY ----------
+var is_invincible: bool = false
+var invincibility_timer: float = 0.0
 
 # ---------- DOUBLE JUMP ----------
 var has_double_jumped: bool = false
@@ -119,6 +124,15 @@ func update_jump_timers(delta: float) -> void:
 
 	if attack_cooldown_timer_value > 0:
 		attack_cooldown_timer_value -= delta
+
+	if invincibility_timer > 0:
+		invincibility_timer -= delta
+		if invincibility_timer <= 0:
+			is_invincible = false
+
+
+func is_currently_invincible() -> bool:
+	return is_invincible
 
 
 func is_touching_wall_for_cling() -> bool:
@@ -199,14 +213,11 @@ func handle_state_transitions() -> void:
 	if Input.is_action_just_pressed("attack") and attack_cooldown_timer_value <= 0:
 		current_state = State.ATTACK
 		attack_hitbox_triggered = false
-		poepietime()
-		
-		if not is_on_floor() and Input.is_action_pressed("move_down"):
+
+		if not is_on_floor() and Input.is_action_pressed("down"):
 			attack_direction = "down"
-			print("DOWN STRIKE triggered")
-		elif Input.is_action_pressed("move_up"):
+		elif Input.is_action_pressed("up"):
 			attack_direction = "up"
-			print("UP STRIKE triggered")
 		else:
 			attack_direction = "side"
 
@@ -360,10 +371,13 @@ func flash_perfect_parry() -> void:
 	tween.tween_property(animated_sprite, "modulate", Color(0.5, 0.5, 2, 1), 0.08)
 	tween.tween_property(animated_sprite, "modulate", Color(1, 1, 1, 1), 0.15)
 
-func poepietime():
-	var randi_output = randi_range(25, 50)
-	print(randi_output)
-	
+
+func start_invincibility_flicker() -> void:
+	var flicker_tween = create_tween()
+	flicker_tween.set_loops(int(INVINCIBILITY_DURATION / 0.1))
+	flicker_tween.tween_property(animated_sprite, "modulate:a", 0.3, 0.05)
+	flicker_tween.tween_property(animated_sprite, "modulate:a", 1.0, 0.05)
+
 
 # ---------- SIGNALS ----------
 func _on_timer_timeout() -> void:
@@ -395,6 +409,10 @@ func _on_damaged(amount: int, knockback_dir: Vector2) -> void:
 	flash_hit()
 	var shake_strength = clamp(knockback_dir.length() / 20.0, 2.0, 8.0)
 	GameEffects.screen_shake(camera, shake_strength, 0.1)
+
+	is_invincible = true
+	invincibility_timer = INVINCIBILITY_DURATION
+	start_invincibility_flicker()
 
 func _on_perfectly_deflected(source: Node, attack_type: int) -> void:
 	flash_perfect_parry()

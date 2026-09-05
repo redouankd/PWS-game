@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://ep2qt4imybd0" path="res://assets/sprites/frank_de_kraai_full_sheet (1).png" id="3_ymidd"]
 [ext_resource type="Script" uid="uid://dpaux1nmqdiem" path="res://scripts/hitbox_area.gd" id="4_ql4hm"]
 [ext_resource type="AudioStream" uid="uid://4660p3x8uesx" path="res://assets/sounds/HitSound_Player.mp3" id="6_e4ijx"]
+[ext_resource type="Script" uid="uid://ik37tekvfq1b" path="res://scripts/body_hitbox.gd" id="8_lx236"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e4ijx"]
 atlas = ExtResource("3_ymidd")
@@ -300,5 +301,17 @@ one_shot = true
 [node name="attack_cooldown_timer" type="Timer" parent="." unique_id=1394037516]
 wait_time = 5.0
 one_shot = true
+
+[node name="BodyHitbox" type="Area2D" parent="." unique_id=678014831]
+collision_layer = 32
+collision_mask = 2
+script = ExtResource("8_lx236")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="BodyHitbox" unique_id=1900653891]
+polygon = PackedVector2Array(-3, 17, -5, 4, -9, 0, -10, -12, -6, -19, 0, -19, 3, -14, 3, -11, 5, 2, 9, 11)
+
+[node name="body_hitbox_reset_timer" type="Timer" parent="BodyHitbox" unique_id=547653572]
+wait_time = 0.5
+autostart = true
 
 [connection signal="timeout" from="hitbox_timer" to="." method="_on_hitbox_timer_timeout"]
