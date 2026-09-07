@@ -2,10 +2,9 @@
 
 [ext_resource type="Texture2D" uid="uid://caryacdi57yp0" path="res://assets/sprites/slime_purple.png" id="1_7l6y1"]
 [ext_resource type="Script" uid="uid://cfjw11alydor2" path="res://scripts/purple_slime.gd" id="1_p4tba"]
+[ext_resource type="PackedScene" uid="uid://wk7sivtnrd6o" path="res://scenes/projectile_purpleslime.tscn" id="2_818gd"]
 [ext_resource type="Script" uid="uid://bfugy0mk1f143" path="res://scripts/health.gd" id="2_rwesy"]
-[ext_resource type="Script" uid="uid://dpaux1nmqdiem" path="res://scripts/hitbox_area.gd" id="4_o0hry"]
-[ext_resource type="AudioStream" uid="uid://tcyjrx35nxm4" path="res://assets/sounds/Hitsound_Slime.mp3" id="5_818gd"]
-[ext_resource type="PackedScene" uid="uid://cxg7uxw3mh3dl" path="res://scenes/hit_spark.tscn" id="5_p467k"]
+[ext_resource type="Script" uid="uid://ik37tekvfq1b" path="res://scripts/body_hitbox.gd" id="6_p467k"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vuyyj"]
 atlas = ExtResource("1_7l6y1")
@@ -223,15 +222,16 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t5jri"]
 size = Vector2(10, 12)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_7lxti"]
-size = Vector2(10, 13)
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_4veiw"]
 radius = 102.0049
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4veiw"]
+size = Vector2(10, 12)
 
 [node name="purple_slime" type="CharacterBody2D" unique_id=133795221]
 collision_layer = 4
 script = ExtResource("1_p4tba")
+projectile_scene = ExtResource("2_818gd")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=37681663]
 position = Vector2(0, -12)
@@ -246,19 +246,6 @@ shape = SubResource("RectangleShape2D_t5jri")
 script = ExtResource("2_rwesy")
 max_health = 30
 
-[node name="HitboxArea" type="Area2D" parent="." unique_id=1622834668]
-position = Vector2(1, -6)
-collision_layer = 16
-collision_mask = 2
-script = ExtResource("4_o0hry")
-hit_spark_scene = ExtResource("5_p467k")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxArea" unique_id=265641471]
-shape = SubResource("RectangleShape2D_7lxti")
-
-[node name="HitSound" type="AudioStreamPlayer2D" parent="HitboxArea" unique_id=1670896061]
-stream = ExtResource("5_818gd")
-
 [node name="DetectionArea" type="Area2D" parent="." unique_id=1616548070]
 collision_layer = 32
 collision_mask = 2
@@ -268,6 +255,7 @@ position = Vector2(0, -5)
 shape = SubResource("CircleShape2D_4veiw")
 
 [node name="attack_cooldown_timer" type="Timer" parent="." unique_id=1312683064]
+wait_time = 2.5
 one_shot = true
 
 [node name="hitbox_timer" type="Timer" parent="." unique_id=1892708871]
@@ -277,6 +265,19 @@ one_shot = true
 [node name="hurt_timer" type="Timer" parent="." unique_id=241667400]
 wait_time = 0.3
 one_shot = true
+
+[node name="BodyHitbox" type="Area2D" parent="." unique_id=1007993601]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("6_p467k")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BodyHitbox" unique_id=2092741259]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_4veiw")
+
+[node name="body_hitbox_reset_timer" type="Timer" parent="BodyHitbox" unique_id=457033408]
+wait_time = 0.5
+autostart = true
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="timeout" from="attack_cooldown_timer" to="." method="_on_attack_cooldown_timer_timeout"]

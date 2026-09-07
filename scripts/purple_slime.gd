@@ -2,16 +2,14 @@ extends CharacterBody2D
 
 # ---------- CONSTANTS ----------
 const CHASE_SPEED = 80.0
-const ATTACK_RANGE = 10.0
+const ATTACK_RANGE = 200.0
 
 # ---------- STATE MACHINE ----------
-enum State { IDLE, CHASE, ATTACK, HURT, DEAD, }
+enum State { IDLE, CHASE, ATTACK, HURT, DEAD }
 var current_state: State = State.IDLE
 
 # ---------- NODES ----------
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var hitbox_area: Area2D = $HitboxArea
-@onready var hitbox_timer: Timer = $hitbox_timer
 @onready var attack_cooldown_timer: Timer = $attack_cooldown_timer
 @onready var detection_area: Area2D = $DetectionArea
 @onready var health: Health = $Health
@@ -21,13 +19,12 @@ var current_state: State = State.IDLE
 var player_ref: Node2D = null
 
 # ---------- ATTACK ----------
-var attack_hitbox_triggered = false
+@export var projectile_scene: PackedScene
+@export var projectile_speed: float = 180.0
+var attack_fired: bool = false
 
 # ---------- KNOCKBACK ----------
 var knockback_velocity: Vector2 = Vector2.ZERO
-
-# ---------- HITBOX FLIP ----------
-@export var hitbox_offset_x: float = 1.0
 
 
 func _ready() -> void:
@@ -35,6 +32,7 @@ func _ready() -> void:
 	detection_area.body_exited.connect(_on_detection_body_exited)
 	health.damaged.connect(_on_damaged)
 	health.died.connect(_on_died)
+
 
 func _physics_process(delta: float) -> void:
 	apply_gravity(delta)
@@ -72,7 +70,7 @@ func handle_state_transitions() -> void:
 
 	if distance <= ATTACK_RANGE and attack_cooldown_timer.is_stopped():
 		current_state = State.ATTACK
-		attack_hitbox_triggered = false
+		attack_fired = false
 		return
 
 	current_state = State.CHASE
@@ -94,19 +92,35 @@ func run_current_state(delta: float) -> void:
 			if player_ref != null:
 				var direction = sign(player_ref.global_position.x - global_position.x)
 				face_direction(direction)
-
-			if not attack_hitbox_triggered:
-				attack_hitbox_triggered = true
-				hitbox_area.enable_hitbox()
-				hitbox_timer.start()
+			if not attack_fired:
+				attack_fired = true
 				attack_cooldown_timer.start()
+
+				var telegraph = create_tween()
+				telegraph.tween_property(animated_sprite, "modulate", Color(1.5, 1.5, 0.5, 1), 0.2)
+				telegraph.tween_property(animated_sprite, "modulate", Color(1, 1, 1, 1), 0.2)
+
+				await get_tree().create_timer(0.4).timeout
+				if current_state == State.ATTACK:
+					fire_projectile()
 
 		State.HURT:
 			velocity.x = knockback_velocity.x
 			knockback_velocity.x = move_toward(knockback_velocity.x, 0, CHASE_SPEED * 4 * delta)
-		
+
 		State.DEAD:
-			velocity.x = move_toward(velocity.x, 0, CHASE_SPEED * 4 * delta)
+			velocity.x = move_toward(velocity.x, 0, CHASE_SPEED)
+
+
+func fire_projectile() -> void:
+	if projectile_scene == null or player_ref == null:
+		return
+	var proj = projectile_scene.instantiate()
+	get_tree().current_scene.add_child(proj)
+	proj.global_position = global_position + Vector2(0, -10)
+	var direction = (player_ref.global_position - global_position).normalized()
+	proj.set_direction(direction * projectile_speed)
+
 
 # ---------- ANIMATION ----------
 func update_animation() -> void:
@@ -116,7 +130,8 @@ func update_animation() -> void:
 		State.CHASE:
 			animated_sprite.play("run")
 		State.ATTACK:
-			animated_sprite.play("attack_1")
+			if animated_sprite.animation != "attack_1":
+				animated_sprite.play("attack_1")
 		State.HURT:
 			animated_sprite.play("hurt")
 		State.DEAD:
@@ -127,10 +142,9 @@ func update_animation() -> void:
 func face_direction(direction: float) -> void:
 	if direction > 0:
 		animated_sprite.flip_h = false
-		hitbox_area.position.x = hitbox_offset_x
 	elif direction < 0:
 		animated_sprite.flip_h = true
-		hitbox_area.position.x = -hitbox_offset_x
+
 
 func flash_hit() -> void:
 	var tween = create_tween()
@@ -138,21 +152,8 @@ func flash_hit() -> void:
 	tween.tween_property(animated_sprite, "modulate", Color(4, 4, 4, 1), 0.05)
 	tween.tween_property(animated_sprite, "modulate", Color(1, 1, 1, 1), 0.1)
 
-func apply_stun(duration: float) -> void:
-	current_state = State.HURT
-	if player_ref != null:
-		var direction_away = (global_position - player_ref.global_position).normalized()
-		knockback_velocity = direction_away * 100.0
-	else:
-		knockback_velocity = Vector2.ZERO
-	hurt_timer.wait_time = duration
-	hurt_timer.start()
-	flash_hit()
 
 # ---------- SIGNALS ----------
-func _on_hitbox_timer_timeout() -> void:
-	hitbox_area.disable_hitbox()
-
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if current_state == State.ATTACK:
 		current_state = State.IDLE
@@ -169,14 +170,20 @@ func _on_hurt_timer_timeout() -> void:
 	if current_state != State.DEAD:
 		current_state = State.IDLE
 
-func _on_attack_cooldown_timer_timeout() -> void:
-	pass
+func apply_stun(duration: float) -> void:
+	current_state = State.HURT
+	if player_ref != null:
+		var direction_away = (global_position - player_ref.global_position).normalized()
+		knockback_velocity = direction_away * 100.0
+	else:
+		knockback_velocity = Vector2.ZERO
+	hurt_timer.wait_time = duration
+	hurt_timer.start()
+	flash_hit()
 
 func _on_died() -> void:
 	current_state = State.DEAD
-	hitbox_area.monitoring = false
 	detection_area.monitoring = false
-	animated_sprite.modulate = Color(1, 1, 1, 1)   # reset in case a flash tween was mid-flight
 	animated_sprite.play("death")
 	await animated_sprite.animation_finished
 	queue_free()
