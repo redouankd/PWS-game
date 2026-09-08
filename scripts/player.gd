@@ -91,7 +91,7 @@ func _physics_process(delta: float) -> void:
 	run_current_state(delta)
 	update_animation()
 	move_and_slide()
-
+	print("Player position: ", global_position)
 
 func apply_gravity(delta: float) -> void:
 	if not is_on_floor():
