@@ -7,6 +7,9 @@ extends CanvasLayer
 @export var player_health: Health
 @export var player: CharacterBody2D  
 @export var boss_health: Health
+@onready var focus_bar: ProgressBar = $FocusBar
+
+
 
 func _ready() -> void:
 	add_to_group("ui")
@@ -17,16 +20,25 @@ func _ready() -> void:
 	health_bar.value = player_health.current_health
 	player_health.damaged.connect(_on_player_damaged)
 	player_health.died.connect(_on_player_died)
+	player_health.healed.connect(_on_player_healed)
 	player.player_died.connect(_on_player_animation_done)
 
 	if boss_health:
-		print("Boss health connected: ", boss_health)
 		boss_health_bar.max_value = boss_health.max_health
 		boss_health_bar.value = boss_health.current_health
 		boss_health.damaged.connect(_on_boss_damaged)
 		boss_health.died.connect(_on_boss_died)
-	else:
-		print("boss_health is NULL")
+
+	focus_bar.max_value = PlayerStats.max_focus
+	focus_bar.value = PlayerStats.current_focus
+	PlayerStats.focus_changed.connect(_on_focus_changed)
+
+func _on_player_healed(current: int) -> void:
+	health_bar.value = current
+	
+func _on_focus_changed(current: int, max: int) -> void:
+	focus_bar.value = current
+	
 		
 func _on_player_damaged(amount: int, knockback_dir: Vector2) -> void:
 	health_bar.value = player_health.current_health

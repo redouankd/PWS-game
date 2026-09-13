@@ -20,6 +20,12 @@ const POGO_BOUNCE_MULTIPLIER = 0.85
 const POGO_MIN_BOUNCE = -200.0
 const POGO_MAX_BOUNCE = -420.0
 
+# ---------- FOCUS / HEAL / SPECIAL ----------
+const HEAL_FOCUS_COST = 100
+const HEAL_AMOUNT = 20
+const HEAL_DURATION = 1
+const SPECIAL_FOCUS_COST = 33
+
 # ---------- DEFLECT / BLOCK ----------
 enum { NOT_BLOCKING, PERFECT_WINDOW, LATE_BLOCK }
 const PERFECT_DEFLECT_WINDOW = 0.15
@@ -29,7 +35,7 @@ const LATE_BLOCK_CHIP_DAMAGE = 3
 var block_timer: float = 0.0
 
 # ---------- STATE MACHINE ----------
-enum State { IDLE, RUN, JUMP, DASH, ATTACK, HURT, DEAD, WALL_CLING, BLOCK }
+enum State { IDLE, RUN, JUMP, DASH, ATTACK, HURT, DEAD, WALL_CLING, BLOCK, HEAL }
 var current_state: State = State.IDLE
 
 # ---------- NODES ----------
@@ -91,7 +97,7 @@ func _physics_process(delta: float) -> void:
 	run_current_state(delta)
 	update_animation()
 	move_and_slide()
-	print("Player position: ", global_position)
+
 
 func apply_gravity(delta: float) -> void:
 	if not is_on_floor():
@@ -163,7 +169,7 @@ func get_deflect_state() -> int:
 
 
 func handle_state_transitions() -> void:
-	if current_state == State.HURT or current_state == State.DEAD or current_state == State.DASH:
+	if current_state == State.HURT or current_state == State.DEAD or current_state == State.DASH or current_state == State.HEAL:
 		return
 
 	var direction := Input.get_axis("move_left", "move_right")
@@ -176,6 +182,14 @@ func handle_state_transitions() -> void:
 			up_hitbox_area.disable_hitbox()
 			start_dash()
 			return
+		return
+
+	if Input.is_action_just_pressed("heal"):
+		try_heal()
+		return
+
+	if Input.is_action_just_pressed("special"):
+		try_special_attack()
 		return
 
 	if Input.is_action_pressed("block") and is_on_floor():
@@ -299,6 +313,9 @@ func run_current_state(delta: float) -> void:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 			block_timer += delta
 
+		State.HEAL:
+			velocity.x = 0
+
 		State.DEAD:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 
@@ -334,6 +351,8 @@ func update_animation() -> void:
 		State.BLOCK:
 			if animated_sprite.animation != "block":
 				animated_sprite.play("block")
+		State.HEAL:
+			pass
 		State.DEAD:
 			pass
 
@@ -357,6 +376,40 @@ func start_dash() -> void:
 		has_air_dashed = true
 
 
+func try_heal() -> void:
+	if not is_on_floor():
+		return
+	if PlayerStats.spend_focus(HEAL_FOCUS_COST):
+		current_state = State.HEAL
+		health.heal(HEAL_AMOUNT)
+		var timer = get_tree().create_timer(HEAL_DURATION)
+		await timer.timeout
+		if current_state == State.HEAL:
+			current_state = State.IDLE
+
+
+func try_special_attack() -> void:
+	if not PlayerStats.spend_focus(SPECIAL_FOCUS_COST):
+		return
+
+	if Input.is_action_pressed("up"):
+		special_attack_up()
+	elif Input.is_action_pressed("down") and not is_on_floor():
+		special_attack_down()
+	else:
+		special_attack_side()
+
+
+func special_attack_up() -> void:
+	print("Special (UP) triggered — no ability assigned yet")
+
+func special_attack_down() -> void:
+	print("Special (DOWN) triggered — no ability assigned yet")
+
+func special_attack_side() -> void:
+	print("Special (SIDE) triggered — no ability assigned yet")
+
+
 func flash_hit() -> void:
 	var tween = create_tween()
 	animated_sprite.modulate = Color(1, 1, 1, 1)
@@ -378,6 +431,32 @@ func start_invincibility_flicker() -> void:
 	flicker_tween.tween_property(animated_sprite, "modulate:a", 0.3, 0.05)
 	flicker_tween.tween_property(animated_sprite, "modulate:a", 1.0, 0.05)
 
+func respawn_at_save_point() -> void:
+	var ui = get_tree().get_first_node_in_group("ui")
+	var fade = ui.get_node("TransitionFade") if ui else null
+
+	if fade:
+		await fade.fade_out(0.5)
+
+	await get_tree().create_timer(0.6).timeout
+
+	if SaveManager.last_save_point_id == "":
+		global_position = Vector2.ZERO
+	else:
+		global_position = SaveManager.last_save_position
+
+	health.current_health = health.max_health
+	health.healed.emit(health.current_health)
+
+	current_state = State.IDLE
+	set_physics_process(true)
+	hitbox_area.monitoring = false
+	down_hitbox_area.monitoring = false
+	up_hitbox_area.monitoring = false
+	animated_sprite.modulate = Color(1, 1, 1, 1)
+
+	if fade:
+		await fade.fade_in(0.5)
 
 # ---------- SIGNALS ----------
 func _on_timer_timeout() -> void:
@@ -418,6 +497,7 @@ func _on_perfectly_deflected(source: Node, attack_type: int) -> void:
 	flash_perfect_parry()
 	GameEffects.hit_stop(0.15, 0.02)
 	GameEffects.screen_shake(camera, 6.0, 0.15)
+	PlayerStats.add_focus(PlayerStats.focus_per_parry)
 
 func _on_pogo_hit() -> void:
 	var bounce = clamp(velocity.y * -POGO_BOUNCE_MULTIPLIER, POGO_MAX_BOUNCE, POGO_MIN_BOUNCE)
@@ -434,4 +514,4 @@ func _on_died() -> void:
 	set_physics_process(false)
 	animated_sprite.play("death")
 	await animated_sprite.animation_finished
-	player_died.emit()
+	await respawn_at_save_point()

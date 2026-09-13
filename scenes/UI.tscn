@@ -5,6 +5,14 @@
 [ext_resource type="Script" uid="uid://iy3ph1et3f7f" path="res://scripts/transition_fade.gd" id="2_ua6yw"]
 [ext_resource type="FontFile" uid="uid://beowg2c3s24e" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="3_5en4g"]
 
+[sub_resource type="Theme" id="Theme_7lxti"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mh713"]
+bg_color = Color(0.5534598, 0.010233705, 0.3843648, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p44bm"]
+bg_color = Color(0.21790937, 0.37354532, 0.6722931, 1)
+
 [sub_resource type="Theme" id="Theme_ro3t7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5en4g"]
@@ -23,6 +31,17 @@ bg_color = Color(0, 0.85490197, 0.19607843, 1)
 
 [node name="UI" type="CanvasLayer" unique_id=781763294]
 script = ExtResource("1_ro3t7")
+
+[node name="FocusBar" type="ProgressBar" parent="." unique_id=286164489]
+offset_left = 11.0
+offset_top = 47.0
+offset_right = 259.0
+offset_bottom = 74.0
+scale = Vector2(0.8, 0.5)
+theme = SubResource("Theme_7lxti")
+theme_override_styles/background = SubResource("StyleBoxFlat_mh713")
+theme_override_styles/fill = SubResource("StyleBoxFlat_p44bm")
+show_percentage = false
 
 [node name="HealthBar" type="ProgressBar" parent="." unique_id=714687595]
 offset_left = 10.0

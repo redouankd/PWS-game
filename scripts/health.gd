@@ -4,6 +4,7 @@ class_name Health
 signal died
 signal damaged(amount: int, knockback_dir: Vector2)
 signal perfectly_deflected(source: Node, attack_type: int)
+signal healed(current_health: int)
 
 @export var max_health: int = 100
 var current_health: int
@@ -36,3 +37,4 @@ func take_damage(amount: int, knockback_dir: Vector2 = Vector2.ZERO, source: Nod
 
 func heal(amount: int) -> void:
 	current_health = min(current_health + amount, max_health)
+	healed.emit(current_health)
