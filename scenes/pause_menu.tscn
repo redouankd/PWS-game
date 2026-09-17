@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://f8n04be0ax5"]
+
+[ext_resource type="Script" uid="uid://rx5w74djlouo" path="res://scripts/pause_menu.gd" id="1_myx47"]
+
+[node name="PauseMenu" type="Control" unique_id=1161812468]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_myx47")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1292024233]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+
+[node name="ResumeButton" type="Button" parent="VBoxContainer" unique_id=1410792171]
+layout_mode = 2
+text = "RESUME"
+
+[node name="MainMenuButton" type="Button" parent="VBoxContainer" unique_id=1437411605]
+layout_mode = 2
+text = "MAIN MENU"
+
+[node name="QuitButtonButton" type="Button" parent="VBoxContainer" unique_id=1878296663]
+layout_mode = 2
+text = "QUIT"
+
+[connection signal="pressed" from="VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/MainMenuButton" to="." method="_on_main_menu_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/QuitButtonButton" to="." method="_on_quit_button_button_pressed"]

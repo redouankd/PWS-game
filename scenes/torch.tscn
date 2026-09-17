@@ -57,6 +57,6 @@ autoplay = "default"
 frame_progress = 0.019340409
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1691239013]
-color = Color(1, 0.617338, 0.23043877, 1)
-energy = 1.96
+color = Color(0.39575595, 0.6970585, 0.7439562, 1)
+energy = 0.87
 texture = SubResource("GradientTexture2D_4veiw")
