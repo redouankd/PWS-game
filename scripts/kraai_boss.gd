@@ -38,6 +38,8 @@ enum AttackType { MELEE, PROJECTILE, BURST, DASH, RETREAT_SHOT }
 @export var dash_stop_distance: float = 10.0
 @export var max_melee_in_a_row: int = 2
 @export var dash_telegraph_duration: float = 0.6
+@export var arena_min: Vector2 = Vector2(-100000, -100000)
+@export var arena_max: Vector2 = Vector2(100000, 100000)
 
 # ---------- PHASE 2 BULLET HELL INTRO ----------
 @export var phase_2_burst_count: int = 12
@@ -118,10 +120,13 @@ func _physics_process(delta):
 		if not is_dashing:
 			velocity = Vector2.ZERO
 			move_and_slide()
-		return
+	else:
+		_fly_along_curve(delta)
+		move_and_slide()
 
-	_fly_along_curve(delta)
-	move_and_slide()
+	# Safety clamp — never let the boss leave the arena, regardless of cause
+	global_position.x = clamp(global_position.x, arena_min.x, arena_max.x)
+	global_position.y = clamp(global_position.y, arena_min.y, arena_max.y)
 
 
 func _fly_along_curve(delta):

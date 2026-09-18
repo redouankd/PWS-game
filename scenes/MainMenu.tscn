@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://d27co6egs5osf"]
+
+[ext_resource type="FontFile" uid="uid://vkql4h73ppav" path="res://assets/fonts/PixelOperator8.ttf" id="1_0ykhv"]
+[ext_resource type="Script" uid="uid://cjnqk8n6i4wbc" path="res://scripts/main_menu.gd" id="1_yqorp"]
+
+[sub_resource type="Theme" id="Theme_ux5qa"]
+default_font = ExtResource("1_0ykhv")
+
+[sub_resource type="Theme" id="Theme_0ykhv"]
+
+[sub_resource type="Theme" id="Theme_gunhw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8gofh"]
+bg_color = Color(0.43213984, 0.5700159, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h6wmr"]
+bg_color = Color(0.519415, 0.6520289, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pqd0y"]
+bg_color = Color(0.50734293, 0.64254594, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5k0ak"]
+bg_color = Color(0.65231574, 0.74072546, 1, 1)
+
+[sub_resource type="Theme" id="Theme_4veiw"]
+
+[node name="MainMenu" type="Control" unique_id=2137204771]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_ux5qa")
+script = ExtResource("1_yqorp")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=739912681]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+theme = SubResource("Theme_0ykhv")
+theme_override_constants/separation = 24
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=411198153]
+layout_mode = 2
+text = "CYBORG AND FRANK JUICY CORN"
+horizontal_alignment = 1
+
+[node name="StartButton" type="Button" parent="VBoxContainer" unique_id=1398150247]
+layout_mode = 2
+theme = SubResource("Theme_gunhw")
+theme_override_styles/normal = SubResource("StyleBoxFlat_8gofh")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_h6wmr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pqd0y")
+theme_override_styles/focus = SubResource("StyleBoxFlat_5k0ak")
+text = "NEW GAME"
+
+[node name="ContinueButton" type="Button" parent="VBoxContainer" unique_id=2088697092]
+layout_mode = 2
+theme = SubResource("Theme_gunhw")
+theme_override_styles/normal = SubResource("StyleBoxFlat_8gofh")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_h6wmr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pqd0y")
+theme_override_styles/focus = SubResource("StyleBoxFlat_5k0ak")
+text = "CONTINUE"
+
+[node name="QuitButton" type="Button" parent="VBoxContainer" unique_id=1943952172]
+layout_mode = 2
+theme = SubResource("Theme_gunhw")
+theme_override_styles/normal = SubResource("StyleBoxFlat_8gofh")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_h6wmr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pqd0y")
+theme_override_styles/focus = SubResource("StyleBoxFlat_5k0ak")
+text = "QUIT
+"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1463389184]
+layout_mode = 2
+theme = SubResource("Theme_4veiw")
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

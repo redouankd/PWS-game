@@ -23,7 +23,7 @@ const POGO_MAX_BOUNCE = -420.0
 # ---------- FOCUS / HEAL / SPECIAL ----------
 const HEAL_FOCUS_COST = 100
 const HEAL_AMOUNT = 20
-const HEAL_DURATION = 1
+const HEAL_DURATION = 1.4
 const SPECIAL_FOCUS_COST = 33
 
 # ---------- DEFLECT / BLOCK ----------
@@ -444,6 +444,13 @@ func respawn_at_save_point() -> void:
 		global_position = Vector2.ZERO
 	else:
 		global_position = SaveManager.last_save_position
+
+		# Restore camera limits to match the save point's room
+		var limits = SaveManager.last_camera_limits
+		camera.limit_left = int(limits.position.x)
+		camera.limit_right = int(limits.end.x)
+		camera.limit_top = -100000
+		camera.limit_bottom = 100000
 
 	health.current_health = health.max_health
 	health.healed.emit(health.current_health)
