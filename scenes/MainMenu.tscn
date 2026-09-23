@@ -2,11 +2,21 @@
 
 [ext_resource type="FontFile" uid="uid://vkql4h73ppav" path="res://assets/fonts/PixelOperator8.ttf" id="1_0ykhv"]
 [ext_resource type="Script" uid="uid://cjnqk8n6i4wbc" path="res://scripts/main_menu.gd" id="1_yqorp"]
+[ext_resource type="FontFile" uid="uid://beowg2c3s24e" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="3_2wh52"]
 
 [sub_resource type="Theme" id="Theme_ux5qa"]
 default_font = ExtResource("1_0ykhv")
 
 [sub_resource type="Theme" id="Theme_0ykhv"]
+
+[sub_resource type="Theme" id="Theme_4veiw"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_4veiw"]
+line_spacing = 14.0
+font = ExtResource("3_2wh52")
+font_size = 21
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="Theme" id="Theme_gunhw"]
 
@@ -22,8 +32,6 @@ bg_color = Color(0.50734293, 0.64254594, 1, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5k0ak"]
 bg_color = Color(0.65231574, 0.74072546, 1, 1)
 
-[sub_resource type="Theme" id="Theme_4veiw"]
-
 [node name="MainMenu" type="Control" unique_id=2137204771]
 layout_mode = 3
 anchors_preset = 15
@@ -36,15 +44,33 @@ script = ExtResource("1_yqorp")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=739912681]
 layout_mode = 0
-offset_right = 1152.0
-offset_bottom = 648.0
+offset_left = 10.0
+offset_right = 1270.0
+offset_bottom = 720.0
 theme = SubResource("Theme_0ykhv")
 theme_override_constants/separation = 24
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer" unique_id=128650599]
+layout_mode = 2
+theme = SubResource("Theme_4veiw")
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 43
 
 [node name="Label" type="Label" parent="VBoxContainer" unique_id=411198153]
 layout_mode = 2
 text = "CYBORG AND FRANK JUICY CORN"
+label_settings = SubResource("LabelSettings_4veiw")
 horizontal_alignment = 1
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer" unique_id=1140334722]
+layout_mode = 2
+theme = SubResource("Theme_4veiw")
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 36
 
 [node name="StartButton" type="Button" parent="VBoxContainer" unique_id=1398150247]
 layout_mode = 2
@@ -55,6 +81,14 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_pqd0y")
 theme_override_styles/focus = SubResource("StyleBoxFlat_5k0ak")
 text = "NEW GAME"
 
+[node name="MarginContainer4" type="MarginContainer" parent="VBoxContainer" unique_id=753969195]
+layout_mode = 2
+theme = SubResource("Theme_4veiw")
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 20
+
 [node name="ContinueButton" type="Button" parent="VBoxContainer" unique_id=2088697092]
 layout_mode = 2
 theme = SubResource("Theme_gunhw")
@@ -63,6 +97,33 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_h6wmr")
 theme_override_styles/hover = SubResource("StyleBoxFlat_pqd0y")
 theme_override_styles/focus = SubResource("StyleBoxFlat_5k0ak")
 text = "CONTINUE"
+
+[node name="MarginContainer5" type="MarginContainer" parent="VBoxContainer" unique_id=968256993]
+layout_mode = 2
+theme = SubResource("Theme_4veiw")
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 20
+
+[node name="SettingButton" type="Button" parent="VBoxContainer" unique_id=47895674]
+layout_mode = 2
+theme = SubResource("Theme_gunhw")
+theme_override_styles/normal = SubResource("StyleBoxFlat_8gofh")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_h6wmr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pqd0y")
+theme_override_styles/focus = SubResource("StyleBoxFlat_5k0ak")
+text = "SETTINGS
+
+"
+
+[node name="MarginContainer6" type="MarginContainer" parent="VBoxContainer" unique_id=1808804931]
+layout_mode = 2
+theme = SubResource("Theme_4veiw")
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 20
 
 [node name="QuitButton" type="Button" parent="VBoxContainer" unique_id=1943952172]
 layout_mode = 2
@@ -74,14 +135,7 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_5k0ak")
 text = "QUIT
 "
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1463389184]
-layout_mode = 2
-theme = SubResource("Theme_4veiw")
-theme_override_constants/margin_left = 50
-theme_override_constants/margin_top = 50
-theme_override_constants/margin_right = 50
-theme_override_constants/margin_bottom = 50
-
 [connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SettingButton" to="." method="_on_continue_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

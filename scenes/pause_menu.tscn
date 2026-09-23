@@ -2,7 +2,14 @@
 
 [ext_resource type="Script" uid="uid://rx5w74djlouo" path="res://scripts/pause_menu.gd" id="1_myx47"]
 
+[sub_resource type="Theme" id="Theme_4veiw"]
+
+[sub_resource type="Theme" id="Theme_t5jri"]
+
+[sub_resource type="Theme" id="Theme_7lxti"]
+
 [node name="PauseMenu" type="Control" unique_id=1161812468]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,19 +29,39 @@ color = Color(0, 0, 0, 0.5803922)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1292024233]
 layout_mode = 0
-offset_right = 1152.0
-offset_bottom = 648.0
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=915523557]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 247
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
 
 [node name="ResumeButton" type="Button" parent="VBoxContainer" unique_id=1410792171]
 layout_mode = 2
+theme = SubResource("Theme_4veiw")
 text = "RESUME"
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer" unique_id=737193719]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
 
 [node name="MainMenuButton" type="Button" parent="VBoxContainer" unique_id=1437411605]
 layout_mode = 2
+theme = SubResource("Theme_t5jri")
 text = "MAIN MENU"
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer" unique_id=2001121389]
+layout_mode = 2
+theme_override_constants/margin_top = 10
 
 [node name="QuitButtonButton" type="Button" parent="VBoxContainer" unique_id=1878296663]
 layout_mode = 2
+theme = SubResource("Theme_7lxti")
 text = "QUIT"
 
 [connection signal="pressed" from="VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]

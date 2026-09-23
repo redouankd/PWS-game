@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cokgigcx0djfd" path="res://assets/sprites/knight2.png" id="2_qlg0r"]
 [ext_resource type="Script" uid="uid://dpaux1nmqdiem" path="res://scripts/hitbox_area.gd" id="3_qhqgy"]
 [ext_resource type="Script" uid="uid://bfugy0mk1f143" path="res://scripts/health.gd" id="4_dqkch"]
+[ext_resource type="Texture2D" uid="uid://bjp8d4m6p4c6y" path="res://assets/sprites/rimuru_jus_sprite_sheet_by_citotoby_djynhmc-414w-2x.jpg" id="5_smehm"]
 [ext_resource type="AudioStream" uid="uid://4660p3x8uesx" path="res://assets/sounds/HitSound_Player.mp3" id="5_tuyoq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wnwbv"]
@@ -131,6 +132,22 @@ region = Rect2(96, 0, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_tuyoq"]
 atlas = ExtResource("1_3vyb7")
 region = Rect2(32, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u2ulf"]
+atlas = ExtResource("5_smehm")
+region = Rect2(14, 28, 25, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6e8lb"]
+atlas = ExtResource("5_smehm")
+region = Rect2(39, 28, 25, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2gdjj"]
+atlas = ExtResource("5_smehm")
+region = Rect2(64, 28, 25, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sc3ue"]
+atlas = ExtResource("5_smehm")
+region = Rect2(89, 28, 25, 34)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fjrip"]
 atlas = ExtResource("1_3vyb7")
@@ -328,6 +345,23 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_u2ulf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6e8lb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2gdjj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sc3ue")
+}],
+"loop": 1,
+"name": &"rimuru",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_fjrip")
 }, {
 "duration": 1.0,
@@ -422,10 +456,8 @@ script = ExtResource("2_fjrip")
 position = Vector2(0, -16)
 scale = Vector2(1.25, 1.3125)
 sprite_frames = SubResource("SpriteFrames_t5jri")
-animation = &"block"
+animation = &"rimuru"
 autoplay = "idle"
-frame = 2
-frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1030669903]
 position = Vector2(0, -7)

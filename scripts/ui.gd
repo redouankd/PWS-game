@@ -58,6 +58,9 @@ func _on_boss_died() -> void:
 
 func show_boss_bar() -> void:
 	boss_health_bar.visible = true
+	
+func hide_boss_bar() -> void:
+	boss_health_bar.visible = false
 
 func _process(_delta: float) -> void:
 	if game_over_label.visible and Input.is_action_just_pressed("ui_accept"):
