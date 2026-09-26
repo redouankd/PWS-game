@@ -29,8 +29,19 @@ bg_color = Color(0.8627451, 0, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ukj8e"]
 bg_color = Color(0, 0.85490197, 0.19607843, 1)
 
+[sub_resource type="Theme" id="Theme_4veiw"]
+
 [node name="UI" type="CanvasLayer" unique_id=781763294]
 script = ExtResource("1_ro3t7")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1822713232]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5803922)
 
 [node name="FocusBar" type="ProgressBar" parent="." unique_id=286164489]
 offset_left = 11.0
@@ -88,3 +99,18 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 script = ExtResource("2_ua6yw")
+
+[node name="PickupPopup" type="Label" parent="." unique_id=1752712751]
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -186.0
+offset_top = 60.0
+offset_right = 186.0
+offset_bottom = 83.0
+grow_horizontal = 2
+theme = SubResource("Theme_4veiw")
+theme_override_fonts/font = ExtResource("1_dj8aq")
+theme_override_font_sizes/font_size = 24
+text = "You acquired the cyborg pikes"

@@ -8,8 +8,13 @@ extends CanvasLayer
 @export var player: CharacterBody2D  
 @export var boss_health: Health
 @onready var focus_bar: ProgressBar = $FocusBar
+@onready var pickup_popup: Label = $PickupPopup
 
-
+const ABILITY_DISPLAY_NAMES := {
+	"double_jump": "Double Jump Unlocked!",
+	"dash": "Dash Unlocked!",
+	"wall_climb": "Wall Climb Unlocked!"
+}
 
 func _ready() -> void:
 	add_to_group("ui")
@@ -61,6 +66,15 @@ func show_boss_bar() -> void:
 	
 func hide_boss_bar() -> void:
 	boss_health_bar.visible = false
+
+func _on_ability_unlocked(ability_name: String) -> void:
+	pickup_popup.text = ABILITY_DISPLAY_NAMES.get(ability_name, "New Ability Unlocked!")
+	pickup_popup.visible = true
+	var tween := create_tween()
+	tween.tween_property(pickup_popup, "modulate:a", 1.0, 0.3)
+	tween.tween_interval(1.5)
+	tween.tween_property(pickup_popup, "modulate:a", 0.0, 0.5)
+	tween.tween_callback(func(): pickup_popup.visible = false)
 
 func _process(_delta: float) -> void:
 	if game_over_label.visible and Input.is_action_just_pressed("ui_accept"):
