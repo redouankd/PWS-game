@@ -456,7 +456,7 @@ script = ExtResource("2_fjrip")
 position = Vector2(0, -16)
 scale = Vector2(1.25, 1.3125)
 sprite_frames = SubResource("SpriteFrames_t5jri")
-animation = &"rimuru"
+animation = &"idle"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1030669903]
