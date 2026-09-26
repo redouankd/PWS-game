@@ -173,7 +173,7 @@ func handle_state_transitions() -> void:
 		return
 
 	var direction := Input.get_axis("move_left", "move_right")
-	var can_dash_now = can_dash and (is_on_floor() or not has_air_dashed)
+	var can_dash_now = PlayerStats.has_ability("dash") and can_dash and (is_on_floor() or not has_air_dashed)
 
 	if current_state == State.ATTACK:
 		if Input.is_action_just_pressed("dash") and can_dash_now:

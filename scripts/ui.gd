@@ -9,6 +9,8 @@ extends CanvasLayer
 @export var boss_health: Health
 @onready var focus_bar: ProgressBar = $FocusBar
 @onready var pickup_popup: Label = $PickupPopup
+@onready var pause_overlay: ColorRect = $ColorRect
+@onready var pause_menu: Control = $PauseMenu
 
 const ABILITY_DISPLAY_NAMES := {
 	"double_jump": "Double Jump Unlocked!",
@@ -20,6 +22,9 @@ func _ready() -> void:
 	add_to_group("ui")
 	game_over_label.visible = false
 	boss_health_bar.visible = false
+	pickup_popup.visible = false
+	pickup_popup.modulate.a = 0.0
+	PlayerStats.ability_unlocked.connect(_on_ability_unlocked)
 
 	health_bar.max_value = player_health.max_health
 	health_bar.value = player_health.current_health
@@ -69,10 +74,18 @@ func hide_boss_bar() -> void:
 
 func _on_ability_unlocked(ability_name: String) -> void:
 	pickup_popup.text = ABILITY_DISPLAY_NAMES.get(ability_name, "New Ability Unlocked!")
+	pickup_popup.modulate.a = 1.0
 	pickup_popup.visible = true
+	pause_overlay.visible = true
+
+	pause_menu.process_mode = Node.PROCESS_MODE_DISABLED
+	get_tree().paused = true
+	await get_tree().create_timer(3.0).timeout
+	get_tree().paused = false
+	pause_menu.process_mode = Node.PROCESS_MODE_ALWAYS
+
+	pause_overlay.visible = false
 	var tween := create_tween()
-	tween.tween_property(pickup_popup, "modulate:a", 1.0, 0.3)
-	tween.tween_interval(1.5)
 	tween.tween_property(pickup_popup, "modulate:a", 0.0, 0.5)
 	tween.tween_callback(func(): pickup_popup.visible = false)
 
