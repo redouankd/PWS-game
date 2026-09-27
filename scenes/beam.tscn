@@ -12,6 +12,7 @@ script = ExtResource("1_5ijbd")
 damage = 30
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=778900943]
+scale = Vector2(1.01, 1.01)
 shape = SubResource("RectangleShape2D_4veiw")
 
 [node name="Timer" type="Timer" parent="." unique_id=52684459]

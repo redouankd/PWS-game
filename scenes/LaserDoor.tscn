@@ -2,16 +2,32 @@
 
 [ext_resource type="PackedScene" uid="uid://fpiomrsc4vwu" path="res://scenes/beam.tscn" id="1_13hx3"]
 [ext_resource type="Script" uid="uid://tsl66kxopc5l" path="res://scripts/laser_door.gd" id="1_ufgf0"]
+[ext_resource type="Texture2D" uid="uid://bne363rrsfipn" path="res://assets/sprites/laser2.png" id="2_b41e8"]
+[ext_resource type="Texture2D" uid="uid://btlh6gprg3gpt" path="res://assets/sprites/laser1.png" id="2_oe101"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4veiw"]
 size = Vector2(32, 4)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_wjnxg"]
+atlas = ExtResource("2_oe101")
+region = Rect2(84, 48, 42, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jdgjx"]
+atlas = ExtResource("2_b41e8")
+region = Rect2(84, 48, 42, 8)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_ufgf0"]
 animations = [{
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wjnxg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jdgjx")
+}],
 "loop": 1,
 "name": &"on",
-"speed": 5.0
+"speed": 9.0
 }]
 
 [sub_resource type="Gradient" id="Gradient_5ijbd"]
@@ -34,6 +50,7 @@ shape = SubResource("RectangleShape2D_4veiw")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1051248176]
 sprite_frames = SubResource("SpriteFrames_ufgf0")
 animation = &"on"
+frame_progress = 0.98321664
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=839939115]
 position = Vector2(-8.940697e-08, 0)
@@ -43,5 +60,6 @@ energy = 0.35
 texture = SubResource("GradientTexture2D_4veiw")
 
 [node name="DamageArea" parent="." unique_id=1971392774 instance=ExtResource("1_13hx3")]
+damage = 10
 
 [editable path="DamageArea"]

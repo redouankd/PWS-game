@@ -34,8 +34,6 @@ func _ready() -> void:
 	player.player_died.connect(_on_player_animation_done)
 
 	if boss_health:
-		boss_health_bar.max_value = boss_health.max_health
-		boss_health_bar.value = boss_health.current_health
 		boss_health.damaged.connect(_on_boss_damaged)
 		boss_health.died.connect(_on_boss_died)
 
@@ -67,6 +65,8 @@ func _on_boss_died() -> void:
 	boss_health_bar.visible = false
 
 func show_boss_bar() -> void:
+	boss_health_bar.max_value = boss_health.max_health
+	boss_health_bar.value = boss_health.current_health
 	boss_health_bar.visible = true
 	
 func hide_boss_bar() -> void:
