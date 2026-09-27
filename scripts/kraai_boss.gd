@@ -28,7 +28,7 @@ enum AttackType { MELEE, PROJECTILE, BURST, DASH, RETREAT_SHOT }
 @onready var hitbox_timer: Timer = $hitbox_timer
 @onready var attack_cooldown_timer: Timer = $attack_cooldown_timer
 @onready var arena_bounds: Area2D = $"../ArenaBounds"
-@onready var ui: CanvasLayer = $"../UI"
+@onready var ui: CanvasLayer = $"../../UI"
 
 @export var projectile_scene: PackedScene
 @export var melee_range: float = 120.0

@@ -1557,10 +1557,10 @@ collision_mask = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Room_C/ArenaBounds" unique_id=624958746]
 shape = SubResource("RectangleShape2D_t5jri")
 
-[node name="LaserDoor" parent="Room_C/ArenaBounds" unique_id=402932487 instance=ExtResource("17_gunhw")]
-position = Vector2(-240.9524, 59.047638)
+[node name="LaserDoor" parent="Room_C" unique_id=402932487 instance=ExtResource("17_gunhw")]
+position = Vector2(2332, 55)
 rotation = 1.5707964
-scale = Vector2(1.4285716, 1.0476192)
+scale = Vector2(1.5000001, 1.1000001)
 
 [node name="Kraai boss" parent="Room_C" unique_id=180003146 instance=ExtResource("7_64w2a")]
 position = Vector2(2593, -1)

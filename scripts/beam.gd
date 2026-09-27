@@ -10,8 +10,6 @@ var already_hit: Array = []
 
 func _ready() -> void:
 	monitoring = true
-	area_entered.connect(_on_area_entered)
-	body_entered.connect(_on_body_entered)
 	reset_timer.timeout.connect(func(): already_hit.clear())
 
 func _on_area_entered(area: Area2D) -> void:
