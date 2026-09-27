@@ -17,6 +17,7 @@
 [ext_resource type="FontFile" uid="uid://vkql4h73ppav" path="res://assets/fonts/PixelOperator8.ttf" id="14_82cfe"]
 [ext_resource type="Script" uid="uid://756rv8bbxjgu" path="res://scripts/roomtransistion.gd" id="14_fpun6"]
 [ext_resource type="PackedScene" uid="uid://fpiomrsc4vwu" path="res://scenes/beam.tscn" id="16_82cfe"]
+[ext_resource type="PackedScene" uid="uid://cbl4gwmmfsyfv" path="res://scenes/LaserDoor.tscn" id="17_gunhw"]
 [ext_resource type="PackedScene" uid="uid://c08ss5krepmyc" path="res://scenes/big_rim.tscn" id="17_ux5qa"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_oi3di"]
@@ -327,9 +328,6 @@ sources/0 = SubResource("TileSetAtlasSource_0b4ue")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4veiw"]
 size = Vector2(442, 174)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_t5jri"]
-size = Vector2(434.75, 166)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gunhw"]
 texture = ExtResource("1_klq6b")
@@ -1068,6 +1066,9 @@ size = Vector2(20, 716.25)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p44bm"]
 size = Vector2(20, 90)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t5jri"]
+size = Vector2(434.75, 166)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8iemx"]
 texture = ExtResource("13_64w2a")
 0:0/0 = 0
@@ -1331,26 +1332,12 @@ position = Vector2(-530, 448)
 [node name="UI" parent="." unique_id=781763294 node_paths=PackedStringArray("player_health", "player", "boss_health") instance=ExtResource("8_b121j")]
 player_health = NodePath("../Player/Health")
 player = NodePath("../Player")
-boss_health = NodePath("../Kraai boss/Health")
+boss_health = NodePath("../Room_C/Kraai boss/Health")
 
 [node name="PauseMenu" parent="UI" unique_id=1161812468 instance=ExtResource("7_wc255")]
 
-[node name="ArenaBounds" type="Area2D" parent="." unique_id=168473843]
-position = Vector2(2593, -1)
-collision_layer = 32
-collision_mask = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ArenaBounds" unique_id=624958746]
-shape = SubResource("RectangleShape2D_t5jri")
-
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1240697437]
 color = Color(0.48430148, 0.48430148, 0.62040275, 1)
-
-[node name="torch" parent="." unique_id=1312971 instance=ExtResource("11_t1rx8")]
-position = Vector2(-1277, 354)
-
-[node name="torch2" parent="." unique_id=762316663 instance=ExtResource("11_t1rx8")]
-position = Vector2(2374, -9)
 
 [node name="Room_A" type="Node2D" parent="." unique_id=2111106837]
 
@@ -1458,7 +1445,7 @@ offset_right = 34.0
 offset_bottom = -17.0
 grow_horizontal = 2
 theme_override_fonts/font = ExtResource("14_82cfe")
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 8
 text = "UP to
 interact"
 
@@ -1488,7 +1475,7 @@ offset_right = 34.0
 offset_bottom = -17.0
 grow_horizontal = 2
 theme_override_fonts/font = ExtResource("14_82cfe")
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 8
 text = "UP to
 interact"
 
@@ -1518,7 +1505,7 @@ offset_right = 34.0
 offset_bottom = -17.0
 grow_horizontal = 2
 theme_override_fonts/font = ExtResource("14_82cfe")
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 8
 text = "UP to
 interact"
 
@@ -1556,15 +1543,32 @@ shape = SubResource("RectangleShape2D_p44bm")
 [node name="SpawnPoint_Right" type="Marker2D" parent="Room_C" unique_id=1889844325]
 position = Vector2(2823, 75)
 
-[node name="beam" parent="Room_C" unique_id=1971392774 instance=ExtResource("16_82cfe")]
-position = Vector2(345, 52)
-knockback_force = 0.0
-hit_stop_duration = 0.0
-
 [node name="beam2" parent="Room_C" unique_id=1548246767 instance=ExtResource("16_82cfe")]
 position = Vector2(2332, 55)
 rotation = 1.5707964
 scale = Vector2(1.1, 1.1)
+
+[node name="ArenaBounds" type="Area2D" parent="Room_C" unique_id=168473843]
+position = Vector2(2585, -7)
+scale = Vector2(1.05, 1.05)
+collision_layer = 32
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room_C/ArenaBounds" unique_id=624958746]
+shape = SubResource("RectangleShape2D_t5jri")
+
+[node name="LaserDoor" parent="Room_C/ArenaBounds" unique_id=402932487 instance=ExtResource("17_gunhw")]
+position = Vector2(-240.9524, 59.047638)
+rotation = 1.5707964
+scale = Vector2(1.4285716, 1.0476192)
+
+[node name="Kraai boss" parent="Room_C" unique_id=180003146 instance=ExtResource("7_64w2a")]
+position = Vector2(2593, -1)
+flight_points = Array[NodePath]([NodePath("../../bossmarker"), NodePath("../../bossmarker2"), NodePath("../../bossmarker3"), NodePath("../../bossmarker4"), NodePath("../../bossmarker5"), NodePath("../../bossmarker6"), NodePath("../../bossmarker7")])
+arena_min = Vector2(1468, 153)
+arena_max = Vector2(1890, 320)
+melee_range = 110.0
+phase_2_max_height_y = -60.0
 
 [node name="Room_D" type="Node2D" parent="." unique_id=1146285561]
 
@@ -1595,20 +1599,12 @@ position = Vector2(2798, -24)
 [node name="torch4" parent="." unique_id=123034880 instance=ExtResource("11_t1rx8")]
 position = Vector2(275, 39)
 
-[node name="Kraai boss" parent="." unique_id=180003146 instance=ExtResource("7_64w2a")]
-position = Vector2(2593, -1)
-flight_points = Array[NodePath]([NodePath("../bossmarker"), NodePath("../bossmarker2"), NodePath("../bossmarker3"), NodePath("../bossmarker4"), NodePath("../bossmarker5"), NodePath("../bossmarker6"), NodePath("../bossmarker7")])
-arena_min = Vector2(1468, 153)
-arena_max = Vector2(1890, 320)
-melee_range = 110.0
-phase_2_max_height_y = -60.0
-
 [connection signal="body_exited" from="boss_cam_activator" to="boss_cam_activator" method="_on_body_exited"]
 [connection signal="body_shape_entered" from="boss_cam_activator" to="boss_cam_activator" method="_on_area_2d_body_shape_entered"]
 [connection signal="timeout" from="boss_cam_activator/boss cam timer" to="boss_cam_activator" method="_on_boss_cam_timer_timeout"]
-[connection signal="body_entered" from="ArenaBounds" to="Kraai boss" method="_on_arena_body_entered"]
-[connection signal="body_exited" from="ArenaBounds" to="Kraai boss" method="_on_arena_body_exited"]
 [connection signal="body_entered" from="Room_A/A_To_B_Transistion" to="Room_A/A_To_B_Transistion" method="_on_body_entered"]
+[connection signal="body_entered" from="Room_C/ArenaBounds" to="Room_C/Kraai boss" method="_on_arena_body_entered"]
+[connection signal="body_exited" from="Room_C/ArenaBounds" to="Room_C/Kraai boss" method="_on_arena_body_exited"]
 
 [editable path="UI"]
-[editable path="Kraai boss"]
+[editable path="Room_C/Kraai boss"]

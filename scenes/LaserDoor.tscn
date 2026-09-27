@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://cbl4gwmmfsyfv"]
+
+[ext_resource type="PackedScene" uid="uid://fpiomrsc4vwu" path="res://scenes/beam.tscn" id="1_13hx3"]
+[ext_resource type="Script" uid="uid://tsl66kxopc5l" path="res://scripts/laser_door.gd" id="1_ufgf0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4veiw"]
+size = Vector2(32, 4)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ufgf0"]
+animations = [{
+"frames": [],
+"loop": 1,
+"name": &"on",
+"speed": 5.0
+}]
+
+[sub_resource type="Gradient" id="Gradient_5ijbd"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4veiw"]
+gradient = SubResource("Gradient_5ijbd")
+width = 8
+height = 8
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="LaserDoor" type="StaticBody2D" unique_id=402932487]
+script = ExtResource("1_ufgf0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1667268372]
+shape = SubResource("RectangleShape2D_4veiw")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1051248176]
+sprite_frames = SubResource("SpriteFrames_ufgf0")
+animation = &"on"
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=839939115]
+position = Vector2(-8.940697e-08, 0)
+scale = Vector2(45.000004, 122.00001)
+color = Color(1, 0, 0, 1)
+energy = 0.35
+texture = SubResource("GradientTexture2D_4veiw")
+
+[node name="DamageArea" parent="." unique_id=1971392774 instance=ExtResource("1_13hx3")]
+
+[editable path="DamageArea"]
