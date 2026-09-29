@@ -30,6 +30,7 @@ enum AttackType { MELEE, PROJECTILE, BURST, DASH, RETREAT_SHOT }
 @onready var arena_bounds: Area2D = $"../ArenaBounds"
 @onready var ui: CanvasLayer = $"../../UI"
 @onready var laser_door: StaticBody2D = $"../LaserDoor"
+@onready var laser_door_2: StaticBody2D = $"../LaserDoor2"
 
 @export var projectile_scene: PackedScene
 @export var melee_range: float = 120.0
@@ -100,7 +101,7 @@ func _on_arena_body_entered(body: Node) -> void:
 		await get_tree().create_timer(0.5).timeout
 		player_in_arena = true
 		laser_door.activate()
-
+		laser_door_2.activate()
 func _on_arena_body_exited(body: Node) -> void:
 	if body.is_in_group("player"):
 		player_in_arena = false
@@ -405,6 +406,7 @@ func _on_died() -> void:
 	current_state = State.DEAD
 	hitbox_area.monitoring = false
 	laser_door.deactivate()
+	laser_door_2.deactivate()
 	animated_sprite_2d.play("death")
 	await animated_sprite_2d.animation_finished
 	queue_free()

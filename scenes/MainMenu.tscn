@@ -72,14 +72,21 @@ theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 36
 
-[node name="StartButton" type="Button" parent="VBoxContainer" unique_id=1398150247]
+[node name="Slot1Row" type="HBoxContainer" parent="VBoxContainer" unique_id=1077619431]
+layout_mode = 2
+
+[node name="Slot1ResetButton" type="Button" parent="VBoxContainer/Slot1Row" unique_id=1142869682]
+layout_mode = 2
+text = "X"
+
+[node name="Slot1Button" type="Button" parent="VBoxContainer/Slot1Row" unique_id=1398150247]
 layout_mode = 2
 theme = SubResource("Theme_gunhw")
 theme_override_styles/normal = SubResource("StyleBoxFlat_8gofh")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_h6wmr")
 theme_override_styles/hover = SubResource("StyleBoxFlat_pqd0y")
 theme_override_styles/focus = SubResource("StyleBoxFlat_5k0ak")
-text = "NEW GAME"
+text = "SLOT 1"
 
 [node name="MarginContainer4" type="MarginContainer" parent="VBoxContainer" unique_id=753969195]
 layout_mode = 2
@@ -89,16 +96,47 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 20
 
-[node name="ContinueButton" type="Button" parent="VBoxContainer" unique_id=2088697092]
+[node name="Slot2Row" type="HBoxContainer" parent="VBoxContainer" unique_id=1372207238]
+layout_mode = 2
+
+[node name="Slot2ResetButton" type="Button" parent="VBoxContainer/Slot2Row" unique_id=1081608616]
+layout_mode = 2
+text = "X"
+
+[node name="Slot2Button" type="Button" parent="VBoxContainer/Slot2Row" unique_id=2088697092]
 layout_mode = 2
 theme = SubResource("Theme_gunhw")
 theme_override_styles/normal = SubResource("StyleBoxFlat_8gofh")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_h6wmr")
 theme_override_styles/hover = SubResource("StyleBoxFlat_pqd0y")
 theme_override_styles/focus = SubResource("StyleBoxFlat_5k0ak")
-text = "CONTINUE"
+text = "SLOT 2"
 
 [node name="MarginContainer5" type="MarginContainer" parent="VBoxContainer" unique_id=968256993]
+layout_mode = 2
+theme = SubResource("Theme_4veiw")
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 20
+
+[node name="Slot3Row" type="HBoxContainer" parent="VBoxContainer" unique_id=1384160244]
+layout_mode = 2
+
+[node name="Slot3ResetButton" type="Button" parent="VBoxContainer/Slot3Row" unique_id=196790127]
+layout_mode = 2
+text = "X"
+
+[node name="Slot3Button" type="Button" parent="VBoxContainer/Slot3Row" unique_id=314291316]
+layout_mode = 2
+theme = SubResource("Theme_gunhw")
+theme_override_styles/normal = SubResource("StyleBoxFlat_8gofh")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_h6wmr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pqd0y")
+theme_override_styles/focus = SubResource("StyleBoxFlat_5k0ak")
+text = "SLOT 3"
+
+[node name="MarginContainer7" type="MarginContainer" parent="VBoxContainer" unique_id=546775920]
 layout_mode = 2
 theme = SubResource("Theme_4veiw")
 theme_override_constants/margin_left = 50
@@ -135,7 +173,13 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_5k0ak")
 text = "QUIT
 "
 
-[connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
+[node name="ResetConfirmDialog" type="ConfirmationDialog" parent="." unique_id=1910550328]
+
+[connection signal="pressed" from="VBoxContainer/Slot1Row/Slot1ResetButton" to="." method="_on_slot_1_reset_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Slot1Row/Slot1Button" to="." method="_on_slot_1_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Slot2Row/Slot2ResetButton" to="." method="_on_slot_2_reset_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Slot2Row/Slot2Button" to="." method="_on_slot_2_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Slot3Row/Slot3ResetButton" to="." method="_on_slot_3_reset_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Slot3Row/Slot3Button" to="." method="_on_slot_3_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/SettingButton" to="." method="_on_continue_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

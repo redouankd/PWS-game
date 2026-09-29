@@ -78,11 +78,17 @@ theme_override_font_sizes/font_size = 73
 text = "Git Gud"
 
 [node name="BossHealthBar" type="ProgressBar" parent="." unique_id=114733245]
-visible = false
-offset_left = 121.0
-offset_top = 579.0
-offset_right = 1034.0
-offset_bottom = 604.0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -456.5
+offset_top = -115.0
+offset_right = 456.5
+offset_bottom = -95.0
+grow_horizontal = 2
+grow_vertical = 0
 theme = SubResource("Theme_5en4g")
 theme_override_styles/background = SubResource("StyleBoxFlat_w7enk")
 theme_override_styles/fill = SubResource("StyleBoxFlat_ukj8e")
@@ -114,3 +120,17 @@ theme = SubResource("Theme_4veiw")
 theme_override_fonts/font = ExtResource("1_dj8aq")
 theme_override_font_sizes/font_size = 24
 text = "You acquired the cyborg pikes"
+
+[node name="ControlsHint" type="Label" parent="." unique_id=1778141062]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -248.0
+offset_top = -77.0
+offset_right = 248.0
+offset_bottom = -54.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "[←][→] Move    [Space] Jump    [X] Attack    [↑] Interact    [Esc] Pause"

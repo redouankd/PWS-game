@@ -12,6 +12,7 @@ const JUMP_BUFFER_TIME = 0.1
 const WALL_JUMP_VELOCITY = Vector2(100.0, -260.0)
 const WALL_JUMP_LOCKOUT = 0.13
 const WALL_JUMP_CONTROL_LOCK = 0.13
+const WALL_SLIDE_SPEED = 60.0
 const ATTACK_COOLDOWN = 0.1
 const INVINCIBILITY_DURATION = 0.8
 
@@ -149,6 +150,8 @@ func is_touching_wall_for_cling() -> bool:
 	if is_on_floor():
 		return false
 	if not is_on_wall():
+		return false
+	if velocity.y < 0:
 		return false
 
 	var direction := Input.get_axis("move_left", "move_right")
@@ -305,8 +308,8 @@ func run_current_state(delta: float) -> void:
 			knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, SPEED * 4 * delta)
 
 		State.WALL_CLING:
-			velocity.x = 0
-			velocity.y = 0
+			velocity.x = wall_direction * 20.0
+			velocity.y = WALL_SLIDE_SPEED
 			animated_sprite.flip_h = wall_direction < 0
 
 		State.BLOCK:

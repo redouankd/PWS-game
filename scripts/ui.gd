@@ -4,6 +4,7 @@ extends CanvasLayer
 @onready var game_over_label: Label = $GameOverLabel
 @onready var boss_health_bar: ProgressBar = $BossHealthBar
 
+
 @export var player_health: Health
 @export var player: CharacterBody2D  
 @export var boss_health: Health
@@ -11,11 +12,17 @@ extends CanvasLayer
 @onready var pickup_popup: Label = $PickupPopup
 @onready var pause_overlay: ColorRect = $ColorRect
 @onready var pause_menu: Control = $PauseMenu
+@onready var controls_hint: Control = $ControlsHint
 
 const ABILITY_DISPLAY_NAMES := {
 	"double_jump": "Double Jump Unlocked!",
 	"dash": "Dash Unlocked!",
 	"wall_climb": "Wall Climb Unlocked!"
+}
+
+const ABILITY_ACTIONS := {
+	"double_jump": "jump",
+	"dash": "dash",
 }
 
 func _ready() -> void:
@@ -40,6 +47,10 @@ func _ready() -> void:
 	focus_bar.max_value = PlayerStats.max_focus
 	focus_bar.value = PlayerStats.current_focus
 	PlayerStats.focus_changed.connect(_on_focus_changed)
+
+	controls_hint.visible = false
+	if SaveManager.last_save_point_id == "":
+		show_controls_hint()
 
 func _on_player_healed(current: int) -> void:
 	health_bar.value = current
@@ -72,8 +83,29 @@ func show_boss_bar() -> void:
 func hide_boss_bar() -> void:
 	boss_health_bar.visible = false
 
+func show_controls_hint() -> void:
+	controls_hint.visible = true
+	controls_hint.modulate.a = 1.0
+	await get_tree().create_timer(5.0).timeout
+	var tween := create_tween()
+	tween.tween_property(controls_hint, "modulate:a", 0.0, 1.0)
+	tween.tween_callback(func(): controls_hint.visible = false)
+
+func _get_key_hint(action_name: String) -> String:
+	var events := InputMap.action_get_events(action_name)
+	if events.size() > 0:
+		return events[0].as_text().trim_suffix(" (Physical)")
+	return "?"
+
 func _on_ability_unlocked(ability_name: String) -> void:
-	pickup_popup.text = ABILITY_DISPLAY_NAMES.get(ability_name, "New Ability Unlocked!")
+	var title: String = ABILITY_DISPLAY_NAMES.get(ability_name, "New Ability Unlocked!")
+	var hint: String = ""
+	if ABILITY_ACTIONS.has(ability_name):
+		hint = "\nPress [%s]" % _get_key_hint(ABILITY_ACTIONS[ability_name])
+	elif ability_name == "wall_climb":
+		hint = "\nHold toward a wall while airborne"
+
+	pickup_popup.text = title + hint
 	pickup_popup.modulate.a = 1.0
 	pickup_popup.visible = true
 	pause_overlay.visible = true
