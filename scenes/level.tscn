@@ -1265,7 +1265,6 @@ sources/2 = SubResource("TileSetAtlasSource_arp2o")
 size = Vector2(19, 179)
 
 [node name="level" type="Node2D" unique_id=939043803]
-position = Vector2(-905, 240)
 
 [node name="blocklayer" type="TileMapLayer" parent="." unique_id=1762162560]
 visible = false
@@ -1360,7 +1359,7 @@ position = Vector2(773, -53)
 collision_layer = 32
 collision_mask = 2
 script = ExtResource("14_fpun6")
-new_camera_limits = Rect2(169, 0, 850, 0)
+new_camera_limits = Rect2(1070, 0, -843, 0)
 spawn_point = NodePath("../../Room_B/SpawnPoint")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Room_A/A_To_B_Transistion" unique_id=1208544728]
@@ -1387,7 +1386,7 @@ position = Vector2(-53, 1)
 collision_layer = 32
 collision_mask = 2
 script = ExtResource("14_fpun6")
-new_camera_limits = Rect2(-962, 0, 805, 0)
+new_camera_limits = Rect2(-52, 0, 830, 0)
 spawn_point = NodePath("../../Room_A/SpawnPoint_Right")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Room_B/B_To_A_Transition" unique_id=1165652458]
@@ -1401,7 +1400,7 @@ position = Vector2(772, -42)
 collision_layer = 32
 collision_mask = 2
 script = ExtResource("14_fpun6")
-new_camera_limits = Rect2(1269, 0, 670, 0)
+new_camera_limits = Rect2(2163, 0, -682, 0)
 spawn_point = NodePath("../../Room_C/SpawnPoint")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Room_B/B_To_C" unique_id=838505740]
@@ -1412,7 +1411,7 @@ position = Vector2(-1208, -42)
 collision_layer = 32
 collision_mask = 2
 script = ExtResource("14_fpun6")
-new_camera_limits = Rect2(1269, 0, 670, 0)
+new_camera_limits = Rect2(2163, 0, -682, 0)
 spawn_point = NodePath("../../Room_C/SpawnPoint")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Room_B/B_To_C2" unique_id=1678057152]
@@ -1526,7 +1525,7 @@ position = Vector2(2167, 121)
 collision_layer = 32
 collision_mask = 2
 script = ExtResource("14_fpun6")
-new_camera_limits = Rect2(169, 0, 850, 0)
+new_camera_limits = Rect2(1070, 0, -843, 0)
 spawn_point = NodePath("../../Room_B/SpawnPoint_Right")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Room_C/C_To_B" unique_id=1507736627]
@@ -1568,10 +1567,7 @@ scale = Vector2(1.1, 1)
 [node name="Kraai boss" parent="Room_C" unique_id=180003146 instance=ExtResource("7_64w2a")]
 position = Vector2(2593, -1)
 flight_points = Array[NodePath]([NodePath("../../bossmarker"), NodePath("../../bossmarker2"), NodePath("../../bossmarker3"), NodePath("../../bossmarker4"), NodePath("../../bossmarker5"), NodePath("../../bossmarker6"), NodePath("../../bossmarker7")])
-arena_min = Vector2(1468, 153)
-arena_max = Vector2(1890, 320)
-melee_range = 110.0
-phase_2_max_height_y = -60.0
+projectile_scene = null
 
 [node name="Room_D" type="Node2D" parent="." unique_id=1146285561]
 

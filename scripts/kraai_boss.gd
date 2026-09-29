@@ -10,6 +10,7 @@ extends CharacterBody2D
 @export var curve_smoothness = 0.2
 @export var arena_min: Vector2 = Vector2(-100000, -100000)
 @export var arena_max: Vector2 = Vector2(100000, 100000)
+@export var boss_id: String = "kraai"
 
 var curve: Curve2D
 var path_length: float
@@ -63,6 +64,10 @@ var melee_streak: int = 0
 
 
 func _ready():
+	if SaveManager.is_boss_defeated(boss_id):
+		queue_free()
+		return
+
 	var points: Array[Vector2] = []
 	for p in flight_points:
 		points.append(get_node(p).global_position)
@@ -407,6 +412,8 @@ func _on_died() -> void:
 	hitbox_area.monitoring = false
 	laser_door.deactivate()
 	laser_door_2.deactivate()
+	SaveManager.mark_boss_defeated(boss_id)
+	SaveManager.save_game()
 	animated_sprite_2d.play("death")
 	await animated_sprite_2d.animation_finished
 	queue_free()

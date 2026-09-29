@@ -8,6 +8,7 @@ var last_save_point_id: String = ""
 var last_save_position: Vector2 = Vector2.ZERO
 var last_camera_limits: Rect2 = Rect2()
 var collected_pickups: Dictionary = {}
+var defeated_bosses: Dictionary = {}
 
 func get_save_path(slot: int) -> String:
 	return SAVE_PATH_FORMAT % slot
@@ -28,6 +29,7 @@ func start_new_game(slot: int) -> void:
 		"wall_climb": false,
 	}
 	collected_pickups = {}
+	defeated_bosses = {}
 	last_save_point_id = ""
 	last_save_position = Vector2.ZERO
 	last_camera_limits = Rect2()
@@ -38,6 +40,7 @@ func save_game() -> void:
 	var config = ConfigFile.new()
 	config.set_value("player", "abilities", PlayerStats.unlocked_abilities)
 	config.set_value("player", "collected_pickups", collected_pickups)
+	config.set_value("player", "defeated_bosses", defeated_bosses)
 	config.set_value("player", "save_point_id", last_save_point_id)
 	config.set_value("player", "position_x", last_save_position.x)
 	config.set_value("player", "position_y", last_save_position.y)
@@ -57,6 +60,7 @@ func load_game(slot: int) -> bool:
 	current_slot = slot
 	PlayerStats.unlocked_abilities = config.get_value("player", "abilities", PlayerStats.unlocked_abilities)
 	collected_pickups = config.get_value("player", "collected_pickups", {})
+	defeated_bosses = config.get_value("player", "defeated_bosses", {})
 	last_save_point_id = config.get_value("player", "save_point_id", "")
 	last_save_position = Vector2(
 		config.get_value("player", "position_x", 0.0),
@@ -75,6 +79,12 @@ func is_pickup_collected(pickup_id: String) -> bool:
 
 func mark_pickup_collected(pickup_id: String) -> void:
 	collected_pickups[pickup_id] = true
+
+func is_boss_defeated(boss_id: String) -> bool:
+	return defeated_bosses.get(boss_id, false)
+
+func mark_boss_defeated(boss_id: String) -> void:
+	defeated_bosses[boss_id] = true
 
 func set_save_point(id: String, pos: Vector2, cam_limits: Rect2) -> void:
 	last_save_point_id = id

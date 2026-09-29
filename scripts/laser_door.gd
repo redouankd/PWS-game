@@ -7,7 +7,9 @@ extends StaticBody2D
 @onready var damage_area_shape: CollisionShape2D = $DamageArea/CollisionShape2D
 
 func _ready() -> void:
+	add_to_group("laser_door")
 	deactivate()
+	
 
 func activate() -> void:
 	sprite.visible = true

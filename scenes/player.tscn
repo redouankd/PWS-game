@@ -332,8 +332,8 @@ script = ExtResource("1_g2els")
 [node name="player_cam" type="Camera2D" parent="." unique_id=1286123375]
 position = Vector2(0, -10)
 zoom = Vector2(3, 3)
-limit_left = -972
-limit_right = -124
+limit_left = -52
+limit_right = 830
 limit_smoothed = true
 position_smoothing_enabled = true
 position_smoothing_speed = 6.0

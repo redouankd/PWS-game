@@ -522,6 +522,8 @@ func _on_died() -> void:
 	up_hitbox_area.monitoring = false
 	velocity = Vector2.ZERO
 	set_physics_process(false)
+	for door in get_tree().get_nodes_in_group("laser_door"):
+		door.deactivate()
 	animated_sprite.play("death")
 	await animated_sprite.animation_finished
-	await respawn_at_save_point()
+	get_tree().reload_current_scene()
