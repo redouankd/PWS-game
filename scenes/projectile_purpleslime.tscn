@@ -50,20 +50,21 @@ animations = [{
 }],
 "loop": 1,
 "name": &"default",
-"speed": 10.0
+"speed": 9.0
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4veiw"]
 radius = 6.0
 
 [node name="Projectile_purpleslime" type="Area2D" unique_id=138988256]
-collision_layer = 4
+collision_layer = 5
 collision_mask = 2
 script = ExtResource("1_s4bfr")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1596245061]
 sprite_frames = SubResource("SpriteFrames_4veiw")
-frame_progress = 0.29980695
+autoplay = "default"
+frame_progress = 0.04522908
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1675400381]
 position = Vector2(-0.3, 0.5)

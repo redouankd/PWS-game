@@ -707,6 +707,7 @@ tile_set = SubResource("TileSet_7lxti")
 
 [node name="FlyingBot" parent="Room_A" unique_id=1470137065 instance=ExtResource("8_82cfe")]
 position = Vector2(502, -197)
+projectile_speed = 300.0
 
 [node name="BigRim" parent="Room_A" unique_id=2018002193 instance=ExtResource("17_ux5qa")]
 position = Vector2(633, -747)
@@ -906,9 +907,11 @@ position = Vector2(2134, 591)
 
 [node name="FlyingBot" parent="Room_B" unique_id=1636658998 instance=ExtResource("8_82cfe")]
 position = Vector2(1894, 498)
+projectile_speed = 250.0
 
 [node name="FlyingBot2" parent="Room_B" unique_id=295466948 instance=ExtResource("8_82cfe")]
 position = Vector2(2177, 498)
+projectile_speed = 250.0
 
 [node name="Room_C" type="Node2D" parent="." unique_id=1693560821]
 

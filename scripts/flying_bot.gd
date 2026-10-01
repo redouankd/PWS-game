@@ -109,7 +109,7 @@ func run_current_state(delta: float) -> void:
 				attack_cooldown_timer.start()
 
 				var telegraph = create_tween()
-				telegraph.tween_property(animated_sprite, "modulate", Color(1.5, 1.5, 0.5, 1), 0.2)
+				telegraph.tween_property(animated_sprite, "modulate", Color(0.308, 0.0, 0.074, 0.741), 0.2)
 				telegraph.tween_property(animated_sprite, "modulate", Color(1, 1, 1, 1), 0.2)
 
 				await get_tree().create_timer(0.4).timeout

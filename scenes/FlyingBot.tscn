@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bfugy0mk1f143" path="res://scripts/health.gd" id="2_g2brh"]
 [ext_resource type="PackedScene" uid="uid://33gjv4kgsp35" path="res://scenes/flying_bot_projectile.tscn" id="2_h6wwf"]
 [ext_resource type="Texture2D" uid="uid://40gyy81i55i7" path="res://assets/sprites/vliegende robot spritesheet.png" id="2_i8ooa"]
+[ext_resource type="Texture2D" uid="uid://pth6b34r0enl" path="res://assets/sprites/vliegende robot spritesheet (1).png" id="4_ijlrt"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h6wwf"]
 atlas = ExtResource("2_i8ooa")
@@ -30,16 +31,32 @@ atlas = ExtResource("2_i8ooa")
 region = Rect2(160, 32, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yitj3"]
-atlas = ExtResource("2_i8ooa")
-region = Rect2(0, 32, 32, 32)
+atlas = ExtResource("4_ijlrt")
+region = Rect2(0, 96, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yij00"]
-atlas = ExtResource("2_i8ooa")
-region = Rect2(32, 32, 32, 32)
+atlas = ExtResource("4_ijlrt")
+region = Rect2(32, 96, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4tosv"]
-atlas = ExtResource("2_i8ooa")
-region = Rect2(64, 32, 32, 32)
+atlas = ExtResource("4_ijlrt")
+region = Rect2(64, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_isc7a"]
+atlas = ExtResource("4_ijlrt")
+region = Rect2(96, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_382t4"]
+atlas = ExtResource("4_ijlrt")
+region = Rect2(128, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g27ca"]
+atlas = ExtResource("4_ijlrt")
+region = Rect2(160, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_niv7g"]
+atlas = ExtResource("4_ijlrt")
+region = Rect2(192, 96, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g1v2r"]
 atlas = ExtResource("2_i8ooa")
@@ -115,10 +132,22 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_4tosv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_isc7a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_382t4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g27ca")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_niv7g")
 }],
 "loop": 0,
 "name": &"death",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -178,8 +207,10 @@ projectile_scene = ExtResource("2_h6wwf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=147303121]
 sprite_frames = SubResource("SpriteFrames_4veiw")
-animation = &"idle"
+animation = &"death"
 autoplay = "idle"
+frame = 6
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=729104390]
 shape = SubResource("RectangleShape2D_t5jri")
@@ -196,7 +227,7 @@ script = ExtResource("2_g2brh")
 max_health = 10
 
 [node name="AttackCooldownTimer" type="Timer" parent="." unique_id=267840988]
-wait_time = 2.0
+wait_time = 1.5
 one_shot = true
 
 [node name="HurtTimer" type="Timer" parent="." unique_id=1628893927]
