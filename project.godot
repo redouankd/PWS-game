@@ -15,6 +15,10 @@ run/main_scene="uid://d27co6egs5osf"
 config/features=PackedStringArray("4.7", "Forward Plus")
 run/max_fps=60
 
+[audio]
+
+buses/default_bus_layout="uid://cpe2uu0ieskck"
+
 [autoload]
 
 GameEffects="*uid://d3kky6b4i1gwr"

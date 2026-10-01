@@ -30,8 +30,7 @@ enum AttackType { MELEE, PROJECTILE, BURST, DASH, RETREAT_SHOT }
 @onready var attack_cooldown_timer: Timer = $attack_cooldown_timer
 @onready var arena_bounds: Area2D = $"../ArenaBounds"
 @onready var ui: CanvasLayer = $"../../UI"
-@onready var laser_door: StaticBody2D = $"../LaserDoor"
-@onready var laser_door_2: StaticBody2D = $"../LaserDoor2"
+@export var door_group: String = "kraai_doors"
 
 @export var projectile_scene: PackedScene
 @export var melee_range: float = 120.0
@@ -105,8 +104,8 @@ func _on_arena_body_entered(body: Node) -> void:
 		ui.show_boss_bar()
 		await get_tree().create_timer(0.5).timeout
 		player_in_arena = true
-		laser_door.activate()
-		laser_door_2.activate()
+		for door in get_tree().get_nodes_in_group(door_group):
+			door.activate()
 func _on_arena_body_exited(body: Node) -> void:
 	if body.is_in_group("player"):
 		player_in_arena = false
@@ -410,8 +409,8 @@ func flash_hit() -> void:
 func _on_died() -> void:
 	current_state = State.DEAD
 	hitbox_area.monitoring = false
-	laser_door.deactivate()
-	laser_door_2.deactivate()
+	for door in get_tree().get_nodes_in_group(door_group):
+		door.deactivate()
 	SaveManager.mark_boss_defeated(boss_id)
 	SaveManager.save_game()
 	animated_sprite_2d.play("death")

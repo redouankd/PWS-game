@@ -1,5 +1,7 @@
 extends StaticBody2D
 
+@export var door_group: String = ""
+
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var light: PointLight2D = $PointLight2D
@@ -8,6 +10,8 @@ extends StaticBody2D
 
 func _ready() -> void:
 	add_to_group("laser_door")
+	if door_group != "":
+		add_to_group(door_group)
 	deactivate()
 	
 

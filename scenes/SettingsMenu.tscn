@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://bnw1bq74kgtje"]
+
+[ext_resource type="Script" uid="uid://c5il3p4i66pbx" path="res://scripts/settings_menu.gd" id="1_yelko"]
+[ext_resource type="FontFile" uid="uid://vkql4h73ppav" path="res://assets/fonts/PixelOperator8.ttf" id="2_1yw23"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_1yw23"]
+
+[node name="SettingsMenu" type="Control" unique_id=366496623]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yelko")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1572275472]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Settings" type="Label" parent="VBoxContainer" unique_id=1638061185]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_1yw23")
+theme_override_font_sizes/font_size = 33
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=852064658]
+layout_mode = 2
+theme_override_constants/margin_bottom = 232
+
+[node name="Master Volume" type="Label" parent="VBoxContainer" unique_id=821445225]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_1yw23")
+text = "Master volume"
+label_settings = SubResource("LabelSettings_1yw23")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MasterSlider" type="HSlider" parent="VBoxContainer" unique_id=715042194]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+
+[node name="Music Volume" type="Label" parent="VBoxContainer" unique_id=1397356220]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_1yw23")
+text = "Music volume"
+horizontal_alignment = 1
+
+[node name="MusicSlider" type="HSlider" parent="VBoxContainer" unique_id=1313225708]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+
+[node name="SFX Volume" type="Label" parent="VBoxContainer" unique_id=1091335526]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_1yw23")
+text = "SFX volume"
+horizontal_alignment = 1
+
+[node name="SFXSlider" type="HSlider" parent="VBoxContainer" unique_id=2111543738]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+
+[node name="FullscreenCheckBox" type="CheckBox" parent="VBoxContainer" unique_id=245083033]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_1yw23")
+text = "Fullscreen"
+
+[node name="BackButton" type="Button" parent="VBoxContainer" unique_id=26504274]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_1yw23")
+text = "Back"
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer" unique_id=220691808]
+layout_mode = 2
+theme_override_constants/margin_bottom = 189
+
+[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

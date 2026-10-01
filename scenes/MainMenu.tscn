@@ -32,6 +32,8 @@ bg_color = Color(0.50734293, 0.64254594, 1, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5k0ak"]
 bg_color = Color(0.65231574, 0.74072546, 1, 1)
 
+[sub_resource type="Theme" id="Theme_t5jri"]
+
 [node name="MainMenu" type="Control" unique_id=2137204771]
 layout_mode = 3
 anchors_preset = 15
@@ -74,6 +76,7 @@ theme_override_constants/margin_bottom = 36
 
 [node name="Slot1Row" type="HBoxContainer" parent="VBoxContainer" unique_id=1077619431]
 layout_mode = 2
+alignment = 1
 
 [node name="Slot1ResetButton" type="Button" parent="VBoxContainer/Slot1Row" unique_id=1142869682]
 layout_mode = 2
@@ -98,6 +101,7 @@ theme_override_constants/margin_bottom = 20
 
 [node name="Slot2Row" type="HBoxContainer" parent="VBoxContainer" unique_id=1372207238]
 layout_mode = 2
+alignment = 1
 
 [node name="Slot2ResetButton" type="Button" parent="VBoxContainer/Slot2Row" unique_id=1081608616]
 layout_mode = 2
@@ -122,6 +126,8 @@ theme_override_constants/margin_bottom = 20
 
 [node name="Slot3Row" type="HBoxContainer" parent="VBoxContainer" unique_id=1384160244]
 layout_mode = 2
+theme = SubResource("Theme_t5jri")
+alignment = 1
 
 [node name="Slot3ResetButton" type="Button" parent="VBoxContainer/Slot3Row" unique_id=196790127]
 layout_mode = 2
@@ -181,5 +187,5 @@ text = "QUIT
 [connection signal="pressed" from="VBoxContainer/Slot2Row/Slot2Button" to="." method="_on_slot_2_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/Slot3Row/Slot3ResetButton" to="." method="_on_slot_3_reset_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/Slot3Row/Slot3Button" to="." method="_on_slot_3_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/SettingButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SettingButton" to="." method="_on_setting_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

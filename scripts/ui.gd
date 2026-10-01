@@ -13,6 +13,7 @@ extends CanvasLayer
 @onready var pause_overlay: ColorRect = $ColorRect
 @onready var pause_menu: Control = $PauseMenu
 @onready var controls_hint: Control = $ControlsHint
+@onready var block_hint: Label = $"BlockHint"
 
 const ABILITY_DISPLAY_NAMES := {
 	"double_jump": "Double Jump Unlocked!",
@@ -47,7 +48,9 @@ func _ready() -> void:
 	focus_bar.max_value = PlayerStats.max_focus
 	focus_bar.value = PlayerStats.current_focus
 	PlayerStats.focus_changed.connect(_on_focus_changed)
-
+	
+	block_hint.visible = false
+	
 	controls_hint.visible = false
 	if SaveManager.last_save_point_id == "":
 		show_controls_hint()
@@ -91,6 +94,14 @@ func show_controls_hint() -> void:
 	tween.tween_property(controls_hint, "modulate:a", 0.0, 1.0)
 	tween.tween_callback(func(): controls_hint.visible = false)
 
+func show_block_hint() -> void:
+	block_hint.visible = true
+	block_hint.modulate.a = 1.0
+	await get_tree().create_timer(10.0).timeout
+	var tween := create_tween()
+	tween.tween_property(block_hint, "modulate:a", 0.0, 1.0)
+	tween.tween_callback(func(): block_hint.visible = false)
+
 func _get_key_hint(action_name: String) -> String:
 	var events := InputMap.action_get_events(action_name)
 	if events.size() > 0:
@@ -124,3 +135,7 @@ func _on_ability_unlocked(ability_name: String) -> void:
 func _process(_delta: float) -> void:
 	if game_over_label.visible and Input.is_action_just_pressed("ui_accept"):
 		get_tree().reload_current_scene()
+
+
+func _on_block_label_activator_body_entered(body: Node2D) -> void:
+	show_block_hint()
