@@ -2,6 +2,7 @@ extends Area2D
 
 @export var new_camera_limits: Rect2
 @export var spawn_point: Marker2D
+@onready var player: CharacterBody2D = $"../../Player"
 
 func _ready() -> void:
 	if not body_entered.is_connected(_on_body_entered):
@@ -23,6 +24,12 @@ func _on_body_entered(body: Node) -> void:
 
 		if spawn_point:
 			body.global_position = spawn_point.global_position
-
-		await fade.fade_in()
-		body.set_physics_process(true)
+		
+		if player.is_on_floor():
+			await get_tree().create_timer(1.5).timeout
+			await fade.fade_in()
+			body.set_physics_process(true)
+		else:
+			body.set_physics_process(true)
+			await get_tree().create_timer(1.5).timeout
+			await fade.fade_in()

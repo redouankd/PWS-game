@@ -24,6 +24,7 @@ buses/default_bus_layout="uid://cpe2uu0ieskck"
 GameEffects="*uid://d3kky6b4i1gwr"
 PlayerStats="*uid://d2m5b228xakl5"
 SaveManager="*uid://cyo17h7t4heip"
+SettingsManager="*uid://b4hmfynua8j8p"
 
 [display]
 

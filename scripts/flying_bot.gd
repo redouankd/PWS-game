@@ -1,29 +1,34 @@
 extends CharacterBody2D
 
 # ---------- CONSTANTS ----------
-const CHASE_SPEED = 80.0
-const ATTACK_RANGE = 200.0
+const CHASE_SPEED = 30.0
+const RETREAT_SPEED = 30.0
+const MIN_DISTANCE = 90.0
+const ATTACK_RANGE = 120.0
+const HOVER_AMPLITUDE = 6.0
+const HOVER_FREQUENCY = 1.5
 
 # ---------- STATE MACHINE ----------
-enum State { IDLE, CHASE, ATTACK, HURT, DEAD }
+enum State { IDLE, CHASE, RETREAT, ATTACK, HURT, DEAD }
 var current_state: State = State.IDLE
 
 # ---------- NODES ----------
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var attack_cooldown_timer: Timer = $attack_cooldown_timer
+@onready var attack_cooldown_timer: Timer = $AttackCooldownTimer
 @onready var detection_area: Area2D = $DetectionArea
 @onready var health: Health = $Health
-@onready var hurt_timer: Timer = $hurt_timer
-@onready var collision_shape_2d: CollisionShape2D = $BodyHitbox/CollisionShape2D
-@onready var body_hitbox: Area2D = $BodyHitbox
+@onready var hurt_timer: Timer = $HurtTimer
 
 # ---------- DETECTION ----------
 var player_ref: Node2D = null
 
 # ---------- ATTACK ----------
 @export var projectile_scene: PackedScene
-@export var projectile_speed: float = 180.0
+@export var projectile_speed: float = 200.0
 var attack_fired: bool = false
+
+# ---------- FLIGHT ----------
+var hover_time: float = 0.0
 
 # ---------- KNOCKBACK ----------
 var knockback_velocity: Vector2 = Vector2.ZERO
@@ -37,16 +42,11 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	apply_gravity(delta)
+	hover_time += delta
 	handle_state_transitions()
 	run_current_state(delta)
 	update_animation()
 	move_and_slide()
-
-
-func apply_gravity(delta: float) -> void:
-	if not is_on_floor():
-		velocity += get_gravity() * delta
 
 
 # ---------- DETECTION SIGNALS ----------
@@ -70,27 +70,37 @@ func handle_state_transitions() -> void:
 
 	var distance = global_position.distance_to(player_ref.global_position)
 
-	if distance <= ATTACK_RANGE and attack_cooldown_timer.is_stopped():
+	if distance < MIN_DISTANCE:
+		current_state = State.RETREAT
+	elif distance <= ATTACK_RANGE and attack_cooldown_timer.is_stopped():
 		current_state = State.ATTACK
 		attack_fired = false
-		return
-
-	current_state = State.CHASE
+	elif distance > ATTACK_RANGE:
+		current_state = State.CHASE
+	else:
+		current_state = State.IDLE
 
 
 # ---------- PER-STATE BEHAVIOR ----------
 func run_current_state(delta: float) -> void:
+	var hover_offset = sin(hover_time * HOVER_FREQUENCY) * HOVER_AMPLITUDE
+
 	match current_state:
 		State.IDLE:
-			velocity.x = move_toward(velocity.x, 0, CHASE_SPEED)
+			velocity = velocity.move_toward(Vector2(0, hover_offset), CHASE_SPEED * delta * 4)
 
 		State.CHASE:
-			var direction = sign(player_ref.global_position.x - global_position.x)
-			velocity.x = direction * CHASE_SPEED
-			face_direction(direction)
+			var direction = (player_ref.global_position - global_position).normalized()
+			velocity = direction * CHASE_SPEED + Vector2(0, hover_offset)
+			face_direction(sign(direction.x))
+
+		State.RETREAT:
+			var direction = (global_position - player_ref.global_position).normalized()
+			velocity = direction * RETREAT_SPEED + Vector2(0, hover_offset)
+			face_direction(-sign(direction.x))
 
 		State.ATTACK:
-			velocity.x = 0
+			velocity = Vector2(0, hover_offset)
 			if player_ref != null:
 				var direction = sign(player_ref.global_position.x - global_position.x)
 				face_direction(direction)
@@ -105,13 +115,14 @@ func run_current_state(delta: float) -> void:
 				await get_tree().create_timer(0.4).timeout
 				if current_state == State.ATTACK:
 					fire_projectile()
+					current_state = State.IDLE
 
 		State.HURT:
-			velocity.x = knockback_velocity.x
-			knockback_velocity.x = move_toward(knockback_velocity.x, 0, CHASE_SPEED * 4 * delta)
+			velocity = knockback_velocity
+			knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, CHASE_SPEED * 4 * delta)
 
 		State.DEAD:
-			velocity.x = move_toward(velocity.x, 0, CHASE_SPEED)
+			velocity = velocity.move_toward(Vector2.ZERO, CHASE_SPEED * delta)
 
 
 func fire_projectile() -> void:
@@ -120,7 +131,7 @@ func fire_projectile() -> void:
 	var proj = projectile_scene.instantiate()
 	get_tree().current_scene.add_child(proj)
 	proj.shooter = self
-	proj.global_position = global_position + Vector2(0, -10)
+	proj.global_position = global_position
 	var direction = (player_ref.global_position - global_position).normalized()
 	proj.set_direction(direction * projectile_speed)
 
@@ -130,11 +141,11 @@ func update_animation() -> void:
 	match current_state:
 		State.IDLE:
 			animated_sprite.play("idle")
-		State.CHASE:
-			animated_sprite.play("run")
+		State.CHASE, State.RETREAT:
+			animated_sprite.play("fly")
 		State.ATTACK:
-			if animated_sprite.animation != "attack_1":
-				animated_sprite.play("attack_1")
+			if animated_sprite.animation != "attack":
+				animated_sprite.play("attack")
 		State.HURT:
 			animated_sprite.play("hurt")
 		State.DEAD:
@@ -157,10 +168,6 @@ func flash_hit() -> void:
 
 
 # ---------- SIGNALS ----------
-func _on_animated_sprite_2d_animation_finished() -> void:
-	if current_state == State.ATTACK:
-		current_state = State.IDLE
-
 func _on_damaged(amount: int, knockback_dir: Vector2) -> void:
 	if current_state == State.DEAD:
 		return
@@ -187,8 +194,6 @@ func apply_stun(duration: float) -> void:
 func _on_died() -> void:
 	current_state = State.DEAD
 	detection_area.monitoring = false
-	body_hitbox.monitoring = false
-	collision_shape_2d.disabled = true
 	animated_sprite.play("death")
 	await animated_sprite.animation_finished
 	queue_free()

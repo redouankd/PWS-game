@@ -24,7 +24,7 @@ const POGO_MAX_BOUNCE = -420.0
 # ---------- FOCUS / HEAL / SPECIAL ----------
 const HEAL_FOCUS_COST = 100
 const HEAL_AMOUNT = 20
-const HEAL_DURATION = 1.4
+const HEAL_DURATION = 1.0
 const SPECIAL_FOCUS_COST = 33
 
 # ---------- DEFLECT / BLOCK ----------
@@ -60,7 +60,7 @@ var has_air_dashed = false
 var attack_hitbox_triggered = false
 var attack_cooldown_timer_value: float = 0.0
 var attack_direction: String = "side"
-@export var hitbox_offset_x: float = 12.0
+@export var hitbox_offset_x: float = 18.0
 
 # ---------- HURT / KNOCKBACK ----------
 var knockback_velocity: Vector2 = Vector2.ZERO
@@ -89,7 +89,7 @@ func _ready() -> void:
 	if health.has_signal("perfectly_deflected"):
 		health.perfectly_deflected.connect(_on_perfectly_deflected)
 	down_hitbox_area.hit_landed.connect(_on_pogo_hit)
-
+	
 
 func _physics_process(delta: float) -> void:
 	apply_gravity(delta)
@@ -98,7 +98,6 @@ func _physics_process(delta: float) -> void:
 	run_current_state(delta)
 	update_animation()
 	move_and_slide()
-
 
 func apply_gravity(delta: float) -> void:
 	if not is_on_floor():
@@ -386,6 +385,11 @@ func try_heal() -> void:
 		current_state = State.HEAL
 		health.heal(HEAL_AMOUNT)
 		var timer = get_tree().create_timer(HEAL_DURATION)
+		var tween = create_tween()
+		animated_sprite.modulate = Color(1, 1, 1, 1)
+		tween.tween_property(animated_sprite, "modulate", Color(2.5, 2.5, 6, 1), 0.04)
+		tween.tween_property(animated_sprite, "modulate", Color(0.385, 0.981, 0.0, 1.0), 0.08)
+		tween.tween_property(animated_sprite, "modulate", Color(1, 1, 1, 1), 0.15)
 		await timer.timeout
 		if current_state == State.HEAL:
 			current_state = State.IDLE

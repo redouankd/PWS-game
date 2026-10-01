@@ -3,6 +3,7 @@ extends Area2D
 @export var new_camera_limits: Rect2
 @export var spawn_point: Marker2D
 
+
 var player_in_range: bool = false
 var player: Node2D = null
 
@@ -40,7 +41,7 @@ func _room_trans(body: Node):
 
 		body.set_physics_process(false)
 		await fade.fade_out()
-		
+
 		var camera = body.get_node("player_cam")
 		camera.limit_left = int(new_camera_limits.position.x)
 		camera.limit_right = int(new_camera_limits.end.x)
@@ -49,6 +50,6 @@ func _room_trans(body: Node):
 
 		if spawn_point:
 			body.global_position = spawn_point.global_position
-
-		await fade.fade_in()
-		body.set_physics_process(true)
+		
+			body.set_physics_process(true)
+			await fade.fade_in()
