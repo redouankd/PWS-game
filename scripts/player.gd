@@ -89,6 +89,9 @@ func _ready() -> void:
 	if health.has_signal("perfectly_deflected"):
 		health.perfectly_deflected.connect(_on_perfectly_deflected)
 	down_hitbox_area.hit_landed.connect(_on_pogo_hit)
+
+	if SaveManager.last_save_point_id != "":	
+		_apply_save_point_position()
 	
 
 func _physics_process(delta: float) -> void:
@@ -438,6 +441,14 @@ func start_invincibility_flicker() -> void:
 	flicker_tween.tween_property(animated_sprite, "modulate:a", 0.3, 0.05)
 	flicker_tween.tween_property(animated_sprite, "modulate:a", 1.0, 0.05)
 
+func _apply_save_point_position() -> void:
+	global_position = SaveManager.last_save_position
+	var limits = SaveManager.last_camera_limits
+	camera.limit_left = int(limits.position.x)
+	camera.limit_right = int(limits.end.x)
+	camera.limit_top = -100000
+	camera.limit_bottom = 100000
+
 func respawn_at_save_point() -> void:
 	var ui = get_tree().get_first_node_in_group("ui")
 	var fade = ui.get_node("TransitionFade") if ui else null
@@ -450,14 +461,7 @@ func respawn_at_save_point() -> void:
 	if SaveManager.last_save_point_id == "":
 		global_position = Vector2.ZERO
 	else:
-		global_position = SaveManager.last_save_position
-
-		# Restore camera limits to match the save point's room
-		var limits = SaveManager.last_camera_limits
-		camera.limit_left = int(limits.position.x)
-		camera.limit_right = int(limits.end.x)
-		camera.limit_top = -100000
-		camera.limit_bottom = 100000
+		_apply_save_point_position()
 
 	health.current_health = health.max_health
 	health.healed.emit(health.current_health)
