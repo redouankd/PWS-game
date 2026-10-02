@@ -18,8 +18,8 @@ const INVINCIBILITY_DURATION = 0.8
 
 # ---------- DOWN / UP STRIKE ----------
 const POGO_BOUNCE_MULTIPLIER = 0.85
-const POGO_MIN_BOUNCE = -200.0
-const POGO_MAX_BOUNCE = -420.0
+const POGO_MIN_BOUNCE = -280.0
+const POGO_MAX_BOUNCE = -280.0
 
 # ---------- FOCUS / HEAL / SPECIAL ----------
 const HEAL_FOCUS_COST = 100
@@ -534,4 +534,10 @@ func _on_died() -> void:
 		door.deactivate()
 	animated_sprite.play("death")
 	await animated_sprite.animation_finished
+
+	var ui = get_tree().get_first_node_in_group("ui")
+	var fade = ui.get_node("TransitionFade") if ui else null
+	if fade:
+		await fade.fade_out(0.4)
+
 	get_tree().reload_current_scene()

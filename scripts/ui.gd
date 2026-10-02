@@ -30,6 +30,7 @@ func _ready() -> void:
 	add_to_group("ui")
 	game_over_label.visible = false
 	boss_health_bar.visible = false
+	$TransitionFade.fade_in(0.5)
 	pickup_popup.visible = false
 	pickup_popup.modulate.a = 0.0
 	PlayerStats.ability_unlocked.connect(_on_ability_unlocked)

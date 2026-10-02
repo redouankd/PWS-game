@@ -28,4 +28,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _save_and_reset() -> void:
 	SaveManager.set_save_point(save_point_id, global_position, camera_limits)
+
+	var ui = get_tree().get_first_node_in_group("ui")
+	var fade = ui.get_node("TransitionFade") if ui else null
+	if fade:
+		await fade.fade_out(0.4)
+
 	get_tree().reload_current_scene()

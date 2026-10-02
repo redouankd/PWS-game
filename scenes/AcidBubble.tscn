@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://drquaxbkc1ynj"]
+
+[ext_resource type="Script" uid="uid://bc5bu28vuhk5d" path="res://scripts/acid_bubble.gd" id="1_6swnu"]
+[ext_resource type="Texture2D" uid="uid://d3gpp04p1ot2w" path="res://assets/sprites/Tileset cables 1 (1).png" id="2_0cs7x"]
+[ext_resource type="Script" uid="uid://bfugy0mk1f143" path="res://scripts/health.gd" id="3_0cs7x"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wq45q"]
+atlas = ExtResource("2_0cs7x")
+region = Rect2(352, 48, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4veiw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wq45q")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_t5jri"]
+radius = 5.0
+
+[node name="AcidBubble" type="CharacterBody2D" unique_id=72392604]
+collision_layer = 4
+script = ExtResource("1_6swnu")
+float_speed = 80.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1146859947]
+position = Vector2(-0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_4veiw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1708396270]
+shape = SubResource("CircleShape2D_t5jri")
+
+[node name="Health" type="Node" parent="." unique_id=2049180022]
+script = ExtResource("3_0cs7x")
+max_health = 10
