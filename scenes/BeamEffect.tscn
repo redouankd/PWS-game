@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://b41gr2iujpf1k"]
+
+[ext_resource type="Script" uid="uid://ciurlq2i35r2s" path="res://beam_effect.gd" id="1_aq3od"]
+[ext_resource type="Texture2D" uid="uid://1wpmya6rjqf4" path="res://assets/sprites/mc_spritesheet_v1.png" id="2_n0xio"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0xio"]
+atlas = ExtResource("2_n0xio")
+region = Rect2(0, 864, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ojuf"]
+atlas = ExtResource("2_n0xio")
+region = Rect2(80, 864, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_no7gp"]
+atlas = ExtResource("2_n0xio")
+region = Rect2(320, 864, 80, 96)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4veiw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n0xio")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3ojuf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_no7gp")
+}],
+"loop": 0,
+"name": &"beam",
+"speed": 25.0
+}]
+
+[node name="BeamEffect" type="Node2D" unique_id=1793959475]
+script = ExtResource("1_aq3od")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=557916105]
+scale = Vector2(1.125, 1.1041666)
+sprite_frames = SubResource("SpriteFrames_4veiw")
+animation = &"beam"

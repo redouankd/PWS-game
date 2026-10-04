@@ -14,8 +14,11 @@ const WALL_JUMP_LOCKOUT = 0.13
 const WALL_JUMP_CONTROL_LOCK = 0.13
 const WALL_SLIDE_SPEED = 60.0
 const ATTACK_COOLDOWN = 0.1
+const ATTACK_DURATION = 0.3
 const INVINCIBILITY_DURATION = 0.8
 
+const BeamEffect = preload("res://scenes/BeamEffect.tscn")
+const DashTrail = preload("res://scenes/DashTrail.tscn")
 # ---------- DOWN / UP STRIKE ----------
 const POGO_BOUNCE_MULTIPLIER = 0.85
 const POGO_MIN_BOUNCE = -280.0
@@ -47,6 +50,7 @@ var current_state: State = State.IDLE
 @onready var down_hitbox_area: Area2D = $DownHitboxArea
 @onready var up_hitbox_area: Area2D = $UpHitboxArea
 @onready var hitbox_timer: Timer = $hitbox_timer
+@onready var attack_duration_timer: Timer = $attack_duration_timer
 @onready var hurt_timer: Timer = $hurt_timer
 @onready var health: Health = $Health
 @onready var camera: Camera2D = $player_cam
@@ -61,6 +65,9 @@ var attack_hitbox_triggered = false
 var attack_cooldown_timer_value: float = 0.0
 var attack_direction: String = "side"
 @export var hitbox_offset_x: float = 18.0
+@export var beam_offset_up: Vector2 = Vector2(0, -16)
+@export var beam_offset_down: Vector2 = Vector2(0, 12)
+@export var beam_offset_side: Vector2 = Vector2(14, -8)
 
 # ---------- HURT / KNOCKBACK ----------
 var knockback_velocity: Vector2 = Vector2.ZERO
@@ -71,7 +78,7 @@ var invincibility_timer: float = 0.0
 
 # ---------- DOUBLE JUMP ----------
 var has_double_jumped: bool = false
-
+var is_double_jumping: bool = false
 # ---------- WALL CLING ----------
 var wall_direction: int = 0
 var wall_jump_lockout_timer: float = 0.0
@@ -104,15 +111,15 @@ func _physics_process(delta: float) -> void:
 
 func apply_gravity(delta: float) -> void:
 	if not is_on_floor():
-		if current_state != State.WALL_CLING:
+		if current_state != State.WALL_CLING and current_state != State.DASH:
 			velocity += get_gravity() * delta
 	else:
 		has_air_dashed = false
 		has_double_jumped = false
+		is_double_jumping = false
 
 	if Input.is_action_just_released("jump") and velocity.y < 0:
 		velocity.y *= JUMP_CUT_MULTIPLIER
-
 
 func update_jump_timers(delta: float) -> void:
 	if is_on_floor():
@@ -225,6 +232,7 @@ func handle_state_transitions() -> void:
 	if is_touching_wall_for_cling():
 		if current_state != State.WALL_CLING:
 			has_double_jumped = false
+			has_air_dashed = false
 		current_state = State.WALL_CLING
 		wall_direction = 1 if get_wall_normal().x < 0 else -1
 		return
@@ -240,6 +248,9 @@ func handle_state_transitions() -> void:
 		else:
 			attack_direction = "side"
 
+		attack_duration_timer.wait_time = ATTACK_DURATION
+		attack_duration_timer.start()
+
 		return
 
 	if Input.is_action_just_pressed("dash") and can_dash_now:
@@ -251,12 +262,14 @@ func handle_state_transitions() -> void:
 			velocity.y = JUMP_VELOCITY
 			coyote_timer = 0
 			jump_buffer_timer = 0
+			is_double_jumping = false
 			current_state = State.JUMP
 			return
 		elif PlayerStats.has_ability("double_jump") and not has_double_jumped:
 			velocity.y = JUMP_VELOCITY
 			has_double_jumped = true
 			jump_buffer_timer = 0
+			is_double_jumping = true
 			current_state = State.JUMP
 			return
 
@@ -289,6 +302,11 @@ func run_current_state(delta: float) -> void:
 
 		State.DASH:
 			velocity.x = dash_direction * DASH_SPEED
+			velocity.y = 0	
+			dash_trail_timer -= delta
+			if dash_trail_timer <= 0:
+				dash_trail_timer = dash_trail_interval
+				spawn_dash_trail()
 
 		State.ATTACK:
 			velocity.x = direction * SPEED
@@ -304,6 +322,7 @@ func run_current_state(delta: float) -> void:
 					_:
 						hitbox_area.enable_hitbox()
 				hitbox_timer.start()
+				spawn_beam()
 
 		State.HURT:
 			velocity = knockback_velocity
@@ -325,6 +344,24 @@ func run_current_state(delta: float) -> void:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 
 
+func spawn_beam() -> void:
+	var beam = BeamEffect.instantiate()
+	add_child(beam)
+
+	match attack_direction:
+		"down":
+			beam.position = beam_offset_down
+			beam.rotation = Vector2.DOWN.angle()
+		"up":
+			beam.position = beam_offset_up
+			beam.rotation = Vector2.UP.angle()
+		_:
+			var dir = -1 if animated_sprite.flip_h else 1
+			beam.position = Vector2(beam_offset_side.x * dir, beam_offset_side.y)
+			beam.rotation = 0
+			beam.get_node("AnimatedSprite2D").flip_h = animated_sprite.flip_h
+
+
 func get_attack_animation() -> String:
 	match attack_direction:
 		"down":
@@ -338,21 +375,28 @@ func get_attack_animation() -> String:
 func update_animation() -> void:
 	match current_state:
 		State.IDLE:
-			animated_sprite.play("idle")
+			if animated_sprite.animation != "idle":
+				animated_sprite.play("idle")
 		State.RUN:
-			animated_sprite.play("run")
+			if animated_sprite.animation != "run":
+				animated_sprite.play("run")
 		State.JUMP:
-			animated_sprite.play("jump")
+			var jump_anim = "double_jump" if is_double_jumping else "jump"
+			if animated_sprite.animation != jump_anim:
+				animated_sprite.play(jump_anim)
 		State.DASH:
-			animated_sprite.play("dash")
+			if animated_sprite.animation != "dash":
+				animated_sprite.play("dash")
 		State.ATTACK:
 			var anim_name = get_attack_animation()
 			if animated_sprite.animation != anim_name:
 				animated_sprite.play(anim_name)
 		State.HURT:
-			animated_sprite.play("hurt")
+			if animated_sprite.animation != "hurt":
+				animated_sprite.play("hurt")
 		State.WALL_CLING:
-			animated_sprite.play("wall_cling")
+			if animated_sprite.animation != "wall_cling":
+				animated_sprite.play("wall_cling")
 		State.BLOCK:
 			if animated_sprite.animation != "block":
 				animated_sprite.play("block")
@@ -377,6 +421,7 @@ func start_dash() -> void:
 	dash_direction = -1 if animated_sprite.flip_h else 1
 	dash_timer.start()
 	dash_cooldown_timer.start()
+	dash_trail_timer = 0.0
 	if not is_on_floor():
 		has_air_dashed = true
 
@@ -434,6 +479,14 @@ func flash_perfect_parry() -> void:
 	tween.tween_property(animated_sprite, "modulate", Color(0.5, 0.5, 2, 1), 0.08)
 	tween.tween_property(animated_sprite, "modulate", Color(1, 1, 1, 1), 0.15)
 
+@export var dash_trail_interval: float = 0.03
+var dash_trail_timer: float = 0.0
+
+func spawn_dash_trail() -> void:
+	var trail = DashTrail.instantiate()
+	add_child(trail)
+	trail.position = Vector2(-dash_direction * 22, 0)
+	trail.get_node("AnimatedSprite2D").flip_h = animated_sprite.flip_h
 
 func start_invincibility_flicker() -> void:
 	var flicker_tween = create_tween()
@@ -448,6 +501,7 @@ func _apply_save_point_position() -> void:
 	camera.limit_right = int(limits.end.x)
 	camera.limit_top = -100000
 	camera.limit_bottom = 100000
+	camera.reset_smoothing()
 
 func respawn_at_save_point() -> void:
 	var ui = get_tree().get_first_node_in_group("ui")
@@ -489,6 +543,9 @@ func _on_hitbox_timer_timeout() -> void:
 	up_hitbox_area.disable_hitbox()
 
 func _on_animated_sprite_2d_animation_finished() -> void:
+	pass
+
+func _on_attack_duration_timer_timeout() -> void:
 	if current_state == State.ATTACK:
 		current_state = State.IDLE
 		attack_cooldown_timer_value = ATTACK_COOLDOWN

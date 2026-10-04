@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://xcpvc2urm7h0"]
+
+[ext_resource type="Script" uid="uid://dj4e4f2u4sbsq" path="res://scenes/dash_trail.gd" id="1_ch1qo"]
+[ext_resource type="Texture2D" uid="uid://1wpmya6rjqf4" path="res://assets/sprites/mc_spritesheet_v1.png" id="2_tewsu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_earrx"]
+atlas = ExtResource("2_tewsu")
+region = Rect2(0, 480, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_khe2q"]
+atlas = ExtResource("2_tewsu")
+region = Rect2(80, 480, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1d7ge"]
+atlas = ExtResource("2_tewsu")
+region = Rect2(160, 480, 80, 96)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4veiw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_earrx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_khe2q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1d7ge")
+}],
+"loop": 0,
+"name": &"dash_trail",
+"speed": 20.0
+}]
+
+[node name="DashTrail" type="Node2D" unique_id=1168455340]
+script = ExtResource("1_ch1qo")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1508657623]
+sprite_frames = SubResource("SpriteFrames_4veiw")
+animation = &"dash_trail"
+frame = 2
+frame_progress = 1.0

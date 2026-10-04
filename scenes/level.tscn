@@ -19,7 +19,6 @@
 [ext_resource type="Script" uid="uid://bk42li13llns4" path="res://scripts/sewer_enter.gd" id="17_82cfe"]
 [ext_resource type="PackedScene" uid="uid://cbl4gwmmfsyfv" path="res://scenes/LaserDoor.tscn" id="17_gunhw"]
 [ext_resource type="PackedScene" uid="uid://c08ss5krepmyc" path="res://scenes/big_rim.tscn" id="17_ux5qa"]
-[ext_resource type="PackedScene" uid="uid://drquaxbkc1ynj" path="res://scenes/AcidBubble.tscn" id="20_8gofh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4veiw"]
 size = Vector2(442, 174)
@@ -1150,57 +1149,6 @@ position = Vector2(2036, 423)
 position = Vector2(2675, 736)
 save_point_id = "SewerRoomBench"
 camera_limits = Rect2(1766, 0, 1117, 0)
-
-[node name="AcidBubble" parent="Room_C" unique_id=72392604 instance=ExtResource("20_8gofh")]
-position = Vector2(2336, 986)
-
-[node name="AcidBubble2" parent="Room_C" unique_id=1626904544 instance=ExtResource("20_8gofh")]
-position = Vector2(2277, 962)
-
-[node name="AcidBubble3" parent="Room_C" unique_id=2054651850 instance=ExtResource("20_8gofh")]
-position = Vector2(2205, 1024)
-
-[node name="AcidBubble4" parent="Room_C" unique_id=810574857 instance=ExtResource("20_8gofh")]
-position = Vector2(2093, 995)
-
-[node name="AcidBubble5" parent="Room_C" unique_id=598711388 instance=ExtResource("20_8gofh")]
-position = Vector2(2396, 1003)
-
-[node name="AcidBubble6" parent="Room_C" unique_id=1006948578 instance=ExtResource("20_8gofh")]
-position = Vector2(2255, 1004)
-
-[node name="AcidBubble7" parent="Room_C" unique_id=1105695544 instance=ExtResource("20_8gofh")]
-position = Vector2(2249, 1037)
-
-[node name="AcidBubble8" parent="Room_C" unique_id=1916196897 instance=ExtResource("20_8gofh")]
-position = Vector2(1963, 1027)
-
-[node name="AcidBubble9" parent="Room_C" unique_id=1475541623 instance=ExtResource("20_8gofh")]
-position = Vector2(2012, 1042)
-
-[node name="AcidBubble10" parent="Room_C" unique_id=1011276348 instance=ExtResource("20_8gofh")]
-position = Vector2(2033, 1015)
-
-[node name="AcidBubble11" parent="Room_C" unique_id=296004218 instance=ExtResource("20_8gofh")]
-position = Vector2(2074, 1038)
-
-[node name="AcidBubble12" parent="Room_C" unique_id=1265785370 instance=ExtResource("20_8gofh")]
-position = Vector2(2144, 1032)
-
-[node name="AcidBubble13" parent="Room_C" unique_id=169927123 instance=ExtResource("20_8gofh")]
-position = Vector2(2189, 993)
-
-[node name="AcidBubble14" parent="Room_C" unique_id=1717479325 instance=ExtResource("20_8gofh")]
-position = Vector2(2353, 1038)
-
-[node name="AcidBubble15" parent="Room_C" unique_id=817481892 instance=ExtResource("20_8gofh")]
-position = Vector2(1992, 1004)
-
-[node name="AcidBubble16" parent="Room_C" unique_id=1923799726 instance=ExtResource("20_8gofh")]
-position = Vector2(1933, 989)
-
-[node name="AcidBubble17" parent="Room_C" unique_id=419287961 instance=ExtResource("20_8gofh")]
-position = Vector2(2302, 1018)
 
 [connection signal="body_exited" from="boss_cam_activator" to="boss_cam_activator" method="_on_body_exited"]
 [connection signal="body_shape_entered" from="boss_cam_activator" to="boss_cam_activator" method="_on_area_2d_body_shape_entered"]
