@@ -33,6 +33,7 @@ animations = [{
 }]
 
 [node name="DashTrail" type="Node2D" unique_id=1168455340]
+z_index = 6
 script = ExtResource("1_ch1qo")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1508657623]

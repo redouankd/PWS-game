@@ -198,7 +198,7 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t5jri"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4veiw"]
-radius = 194.01031
+radius = 125.09996
 
 [node name="FlyingBot" type="CharacterBody2D" unique_id=1470137065]
 collision_layer = 4

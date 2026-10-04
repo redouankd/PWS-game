@@ -186,9 +186,9 @@ func apply_stun(duration: float) -> void:
 
 func _on_died() -> void:
 	current_state = State.DEAD
-	detection_area.monitoring = false
-	body_hitbox.monitoring = false
-	collision_shape_2d.disabled = true
+	detection_area.set_deferred("monitoring", false)
+	body_hitbox.set_deferred("monitoring", false)
+	collision_shape_2d.set_deferred("disabled", true)
 	animated_sprite.play("death")
 	await animated_sprite.animation_finished
 	queue_free()

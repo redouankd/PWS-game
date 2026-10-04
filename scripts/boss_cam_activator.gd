@@ -1,8 +1,8 @@
 extends Area2D
 
-@onready var boss_cam: Camera2D = $"../boss_cam"
-@onready var player_cam: Camera2D = $"../Player/player_cam"
 @onready var boss_cam_timer: Timer = $"boss cam timer"
+@onready var player_cam: Camera2D = $"../../Player/player_cam"
+@onready var boss_cam: Camera2D = $"../boss_cam"
 
 
 # Called when the node enters the scene tree for the first time.

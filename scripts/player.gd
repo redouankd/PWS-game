@@ -10,12 +10,13 @@ const DASH_SPEED = 300
 const COYOTE_TIME = 0.1
 const JUMP_BUFFER_TIME = 0.1
 const WALL_JUMP_VELOCITY = Vector2(100.0, -260.0)
-const WALL_JUMP_LOCKOUT = 0.13
-const WALL_JUMP_CONTROL_LOCK = 0.13
+const WALL_JUMP_LOCKOUT = 0.10
+const WALL_JUMP_CONTROL_LOCK = 0.10
 const WALL_SLIDE_SPEED = 60.0
 const ATTACK_COOLDOWN = 0.1
 const ATTACK_DURATION = 0.3
 const INVINCIBILITY_DURATION = 0.8
+const MAX_FALL_SPEED = 400.0
 
 const BeamEffect = preload("res://scenes/BeamEffect.tscn")
 const DashTrail = preload("res://scenes/DashTrail.tscn")
@@ -113,6 +114,7 @@ func apply_gravity(delta: float) -> void:
 	if not is_on_floor():
 		if current_state != State.WALL_CLING and current_state != State.DASH:
 			velocity += get_gravity() * delta
+			velocity.y = min(velocity.y, MAX_FALL_SPEED)
 	else:
 		has_air_dashed = false
 		has_double_jumped = false
@@ -396,6 +398,7 @@ func update_animation() -> void:
 				animated_sprite.play("hurt")
 		State.WALL_CLING:
 			if animated_sprite.animation != "wall_cling":
+				animated_sprite.flip_h
 				animated_sprite.play("wall_cling")
 		State.BLOCK:
 			if animated_sprite.animation != "block":
@@ -483,10 +486,16 @@ func flash_perfect_parry() -> void:
 var dash_trail_timer: float = 0.0
 
 func spawn_dash_trail() -> void:
-	var trail = DashTrail.instantiate()
-	add_child(trail)
-	trail.position = Vector2(-dash_direction * 22, 0)
-	trail.get_node("AnimatedSprite2D").flip_h = animated_sprite.flip_h
+	var ghost := Sprite2D.new()
+	ghost.texture = animated_sprite.sprite_frames.get_frame_texture(animated_sprite.animation, animated_sprite.frame)
+	ghost.global_position = global_position
+	ghost.flip_h = animated_sprite.flip_h
+	ghost.centered = animated_sprite.centered
+	ghost.modulate = Color(0.6, 0.8, 1.0, 0.5)
+	get_tree().current_scene.add_child(ghost)
+	var tween := ghost.create_tween()
+	tween.tween_property(ghost, "modulate:a", 0.0, 0.25)
+	tween.tween_callback(ghost.queue_free)
 
 func start_invincibility_flicker() -> void:
 	var flicker_tween = create_tween()
