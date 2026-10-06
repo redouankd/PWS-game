@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dabje27fnj7x0" path="res://scripts/save_point.gd" id="1_xvfwu"]
 [ext_resource type="Texture2D" uid="uid://bj0dacgwtqpif" path="res://assets/sprites/Multi_Platformer_Tileset_Free/Multi_Platformer_Tileset_Free/GrassLand/Props/GrassLand_ChoppedTree.png" id="2_wiums"]
-[ext_resource type="FontFile" uid="uid://vkql4h73ppav" path="res://assets/fonts/PixelOperator8.ttf" id="3_wiums"]
+[ext_resource type="FontFile" uid="uid://beowg2c3s24e" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="3_wiums"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4veiw"]
 
@@ -35,10 +35,10 @@ shape = SubResource("RectangleShape2D_4veiw")
 sprite_frames = SubResource("SpriteFrames_4veiw")
 
 [node name="Label" type="Label" parent="." unique_id=1546658791]
-offset_left = -21.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = -15.0
+offset_left = -28.5
+offset_top = -21.5
+offset_right = 29.5
+offset_bottom = -15.5
 theme_override_fonts/font = ExtResource("3_wiums")
-theme_override_font_sizes/font_size = 4
+theme_override_font_sizes/font_size = 5
 text = "[/\\] INTERACT"
