@@ -253,6 +253,7 @@ func fire_projectile() -> void:
 	var proj = projectile_scene.instantiate()
 	get_tree().current_scene.add_child(proj)
 	proj.global_position = global_position
+	proj.shooter = self
 	var direction = (player_ref.global_position - global_position).normalized()
 	proj.set_direction(direction * projectile_speed)
 
@@ -268,6 +269,7 @@ func fire_projectile_burst(count: int) -> void:
 		var proj = projectile_scene.instantiate()
 		get_tree().current_scene.add_child(proj)
 		proj.global_position = global_position
+		proj.shooter = self
 		proj.set_direction(dir * projectile_speed)
 
 

@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://77gopjiclvt"]
+
+[ext_resource type="Script" uid="uid://ffdp5ouafr0k" path="res://scripts/acid_lake.gd" id="1_fij2u"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wu01b"]
+
+[node name="AcidLake" type="Area2D" unique_id=321804224]
+collision_layer = 32
+collision_mask = 2
+script = ExtResource("1_fij2u")
+damage = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=398215522]
+shape = SubResource("RectangleShape2D_wu01b")
