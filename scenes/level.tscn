@@ -1780,32 +1780,40 @@ z_index = -400
 
 [node name="Parallax2D" type="Parallax2D" parent="paralex" unique_id=1737238786]
 texture_filter = 1
-scroll_scale = Vector2(0.2, 0.2)
-repeat_size = Vector2(1280, 0)
+scale = Vector2(1.8, 1.8)
+scroll_scale = Vector2(0.2, 1)
+repeat_size = Vector2(400, 0)
+repeat_times = 500
 
 [node name="Sprite2D" type="Sprite2D" parent="paralex/Parallax2D" unique_id=260138785]
 texture = ExtResource("21_h6wmr")
 
 [node name="Parallax2D2" type="Parallax2D" parent="paralex" unique_id=1815922912]
 texture_filter = 1
-scroll_scale = Vector2(0.3, 0.3)
-repeat_size = Vector2(1280, 0)
+scale = Vector2(1.8, 1.8)
+scroll_scale = Vector2(0.3, 1)
+repeat_size = Vector2(400, 0)
+repeat_times = 500
 
 [node name="Sprite2D" type="Sprite2D" parent="paralex/Parallax2D2" unique_id=865600687]
 texture = ExtResource("2_pqd0y")
 
 [node name="Parallax2D3" type="Parallax2D" parent="paralex" unique_id=229716493]
 texture_filter = 1
-scroll_scale = Vector2(0.4, 0.4)
-repeat_size = Vector2(1280, 0)
+scale = Vector2(1.8, 1.8)
+scroll_scale = Vector2(0.4, 1)
+repeat_size = Vector2(400, 0)
+repeat_times = 900
 
 [node name="Sprite2D" type="Sprite2D" parent="paralex/Parallax2D3" unique_id=40056921]
 texture = ExtResource("3_5k0ak")
 
 [node name="Parallax2D4" type="Parallax2D" parent="paralex" unique_id=1944795]
 texture_filter = 1
-scroll_scale = Vector2(0.5, 0.5)
-repeat_size = Vector2(1280, 0)
+scale = Vector2(1.8, 1.8)
+scroll_scale = Vector2(0.5, 1)
+repeat_size = Vector2(400, 0)
+repeat_times = 400
 
 [node name="Sprite2D" type="Sprite2D" parent="paralex/Parallax2D4" unique_id=1837397415]
 texture = ExtResource("4_wu01b")
