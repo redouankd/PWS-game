@@ -8,6 +8,10 @@ const ATTACK_RANGE = 200.0
 enum State { IDLE, CHASE, ATTACK, HURT, DEAD }
 var current_state: State = State.IDLE
 
+# -------- SOUNDS -------------
+@export var hit_sound: AudioStream
+@export var death_sound: AudioStream
+
 # ---------- NODES ----------
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var attack_cooldown_timer: Timer = $attack_cooldown_timer
@@ -165,6 +169,7 @@ func _on_damaged(amount: int, knockback_dir: Vector2) -> void:
 	if current_state == State.DEAD:
 		return
 	current_state = State.HURT
+	SoundManager.play_sfx(hit_sound)
 	knockback_velocity = knockback_dir
 	hurt_timer.start()
 	flash_hit()
@@ -185,6 +190,7 @@ func apply_stun(duration: float) -> void:
 	flash_hit()
 
 func _on_died() -> void:
+	SoundManager.play_sfx(death_sound)
 	current_state = State.DEAD
 	detection_area.set_deferred("monitoring", false)
 	body_hitbox.set_deferred("monitoring", false)

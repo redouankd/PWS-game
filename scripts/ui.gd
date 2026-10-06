@@ -4,6 +4,8 @@ extends CanvasLayer
 @onready var game_over_label: Label = $GameOverLabel
 @onready var boss_health_bar: ProgressBar = $BossHealthBar
 
+@export var overworld_music: AudioStream
+@export var ability_unlocked_sound: AudioStream
 
 @export var player_health: Health
 @export var player: CharacterBody2D  
@@ -28,6 +30,7 @@ const ABILITY_ACTIONS := {
 
 func _ready() -> void:
 	add_to_group("ui")
+	SoundManager.play_music(overworld_music, 1.0)
 	game_over_label.visible = false
 	boss_health_bar.visible = false
 	$TransitionFade.fade_in(0.5)
@@ -110,6 +113,7 @@ func _get_key_hint(action_name: String) -> String:
 	return "?"
 
 func _on_ability_unlocked(ability_name: String) -> void:
+	SoundManager.play_sfx(ability_unlocked_sound)
 	var title: String = ABILITY_DISPLAY_NAMES.get(ability_name, "New Ability Unlocked!")
 	var hint: String = ""
 	if ABILITY_ACTIONS.has(ability_name):

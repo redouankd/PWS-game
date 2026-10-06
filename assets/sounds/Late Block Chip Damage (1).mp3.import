@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://drc8ul3wja7lc"
+path="res://.godot/imported/Late Block Chip Damage (1).mp3-9e583aed2735c787254e44f94217d2e8.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/Late Block Chip Damage (1).mp3"
+dest_files=["res://.godot/imported/Late Block Chip Damage (1).mp3-9e583aed2735c787254e44f94217d2e8.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

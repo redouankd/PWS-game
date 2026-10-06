@@ -24,6 +24,15 @@ var current_state: State = State.FLYING
 
 enum AttackType { MELEE, PROJECTILE, BURST, DASH, RETREAT_SHOT }
 
+# ---------- SOUNDS ------------
+@export var melee_attack_sound: AudioStream
+@export var projectile_fire_sound: AudioStream
+@export var dash_sound: AudioStream
+@export var phase1_music: AudioStream
+@export var phase2_music: AudioStream
+
+
+
 @onready var health: Health = $Health
 @onready var hitbox_area: Area2D = $HitboxArea
 @onready var hitbox_timer: Timer = $hitbox_timer
@@ -219,14 +228,17 @@ func start_attack() -> void:
 			animated_sprite_2d.play("melee_attack")
 			hitbox_area.enable_hitbox()
 			hitbox_timer.start()
+			SoundManager.play_sfx(melee_attack_sound)
 
 		AttackType.PROJECTILE:
 			animated_sprite_2d.play("ranged_attack")
 			fire_projectile()
+			SoundManager.play_sfx(projectile_fire_sound)
 
 		AttackType.BURST:
 			animated_sprite_2d.play("ranged_attack")
 			fire_projectile_burst(3)
+			SoundManager.play_sfx(projectile_fire_sound)
 
 		AttackType.DASH:
 			await dash_attack()
@@ -280,7 +292,8 @@ func dash_attack() -> void:
 
 	var direction = (player_ref.global_position - global_position).normalized()
 	var target_pos = player_ref.global_position - direction * dash_stop_distance
-
+	
+	SoundManager.play_sfx(dash_sound)
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_CUBIC)
@@ -335,7 +348,7 @@ func enter_phase_two() -> void:
 	fly_speed *= 1.4
 	attack_cooldown_timer.wait_time = max(attack_cooldown_timer.wait_time * 0.6, 0.6)
 	dash_chance = min(dash_chance + 0.15, 0.6)
-
+	SoundManager.play_music(phase2_music, 1.5)
 	current_state = State.ATTACK
 	is_dashing = true
 	velocity = Vector2.ZERO

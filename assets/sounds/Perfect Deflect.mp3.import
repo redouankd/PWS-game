@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bbuf5eowmvio5"
+path="res://.godot/imported/Perfect Deflect.mp3-21bb0a23fa359b3407cda6d7ea76eacd.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/Perfect Deflect.mp3"
+dest_files=["res://.godot/imported/Perfect Deflect.mp3-21bb0a23fa359b3407cda6d7ea76eacd.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

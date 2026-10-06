@@ -30,9 +30,12 @@ func _on_body_entered(body: Node) -> void:
 		var health = body.get_node("Health")
 		if body.has_method("get_deflect_state") and body.get_deflect_state() == body.PERFECT_WINDOW:
 			velocity = -velocity  # reflect it back
+			set_collision_mask_value(1, true)
+			set_collision_mask_value(2, true) 
+			set_collision_mask_value(3, true)  
+			PlayerStats.add_focus(PlayerStats.focus_per_parry)
 			if shooter != null and is_instance_valid(shooter) and shooter.has_method("apply_stun"):
 				shooter.apply_stun(stun_duration)
-				PlayerStats.add_focus(PlayerStats.focus_per_parry)
 			return
 		health.take_damage(damage, Vector2.ZERO, null, 1)  # 1 = PROJECTILE
 	queue_free()

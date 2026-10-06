@@ -3,7 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://fpiomrsc4vwu" path="res://scenes/beam.tscn" id="1_13hx3"]
 [ext_resource type="Script" uid="uid://tsl66kxopc5l" path="res://scripts/laser_door.gd" id="1_ufgf0"]
 [ext_resource type="Texture2D" uid="uid://bne363rrsfipn" path="res://assets/sprites/laser2.png" id="2_b41e8"]
+[ext_resource type="AudioStream" uid="uid://bnprv8qycd104" path="res://assets/sounds/Laser Activation.mp3" id="2_jdgjx"]
 [ext_resource type="Texture2D" uid="uid://btlh6gprg3gpt" path="res://assets/sprites/laser1.png" id="2_oe101"]
+[ext_resource type="AudioStream" uid="uid://ba5dsaua0odkw" path="res://assets/sounds/Laser Deactivation.mp3" id="3_00bhk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4veiw"]
 size = Vector2(32, 4)
@@ -43,6 +45,8 @@ fill_to = Vector2(1, 0.5)
 
 [node name="LaserDoor" type="StaticBody2D" unique_id=402932487]
 script = ExtResource("1_ufgf0")
+activate_sound = ExtResource("2_jdgjx")
+deactivate_sound = ExtResource("3_00bhk")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1667268372]
 shape = SubResource("RectangleShape2D_4veiw")

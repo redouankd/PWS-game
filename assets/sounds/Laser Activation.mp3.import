@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bnprv8qycd104"
+path="res://.godot/imported/Laser Activation.mp3-e7a82410840d54d09ab881f838455563.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/Laser Activation.mp3"
+dest_files=["res://.godot/imported/Laser Activation.mp3-e7a82410840d54d09ab881f838455563.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

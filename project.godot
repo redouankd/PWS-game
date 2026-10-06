@@ -25,6 +25,7 @@ GameEffects="*uid://d3kky6b4i1gwr"
 PlayerStats="*uid://d2m5b228xakl5"
 SaveManager="*uid://cyo17h7t4heip"
 SettingsManager="*uid://b4hmfynua8j8p"
+SoundManager="*uid://c88adn7n77s4q"
 
 [display]
 

@@ -43,6 +43,18 @@ var block_timer: float = 0.0
 enum State { IDLE, RUN, JUMP, DASH, ATTACK, HURT, DEAD, WALL_CLING, BLOCK, HEAL }
 var current_state: State = State.IDLE
 
+# ---------- SOUNDS -----------------
+@export_group("Sounds")
+@export var jump_sound: AudioStream
+@export var attack_sound: AudioStream
+@export var hurt_sound: AudioStream
+@export var late_block_sound: AudioStream
+@export var perfect_deflect_sound: AudioStream
+@export var death_sound: AudioStream
+@export var dash_sound: AudioStream
+@export var heal_channel_sound: AudioStream
+@export var heal_complete_sound: AudioStream
+
 # ---------- NODES ----------
 @onready var dash_timer: Timer = $dash_timer
 @onready var dash_cooldown_timer: Timer = $dash_cooldown_timer
@@ -131,8 +143,10 @@ func update_jump_timers(delta: float) -> void:
 
 	if Input.is_action_just_pressed("jump"):
 		jump_buffer_timer = JUMP_BUFFER_TIME
+		SoundManager.play_sfx(jump_sound)
 	else:
 		jump_buffer_timer -= delta
+		SoundManager.play_sfx(jump_sound)
 
 	if wall_jump_lockout_timer > 0:
 		wall_jump_lockout_timer -= delta
@@ -241,6 +255,7 @@ func handle_state_transitions() -> void:
 
 	if Input.is_action_just_pressed("attack") and attack_cooldown_timer_value <= 0:
 		current_state = State.ATTACK
+		SoundManager.play_sfx(attack_sound)
 		attack_hitbox_triggered = false
 
 		if not is_on_floor() and Input.is_action_pressed("down"):
@@ -420,6 +435,7 @@ func face_direction(direction: float) -> void:
 
 func start_dash() -> void:
 	current_state = State.DASH
+	SoundManager.play_sfx(dash_sound)
 	can_dash = false
 	dash_direction = -1 if animated_sprite.flip_h else 1
 	dash_timer.start()
@@ -434,6 +450,7 @@ func try_heal() -> void:
 		return
 	if PlayerStats.spend_focus(HEAL_FOCUS_COST):
 		current_state = State.HEAL
+		SoundManager.play_sfx(heal_channel_sound)
 		health.heal(HEAL_AMOUNT)
 		var timer = get_tree().create_timer(HEAL_DURATION)
 		var tween = create_tween()
@@ -444,6 +461,7 @@ func try_heal() -> void:
 		await timer.timeout
 		if current_state == State.HEAL:
 			current_state = State.IDLE
+			SoundManager.play_sfx(heal_complete_sound)
 
 
 func try_special_attack() -> void:
@@ -566,6 +584,10 @@ func _on_hurt_timer_timeout() -> void:
 func _on_damaged(amount: int, knockback_dir: Vector2) -> void:
 	if current_state == State.DEAD:
 		return
+	if current_state == State.BLOCK:
+		SoundManager.play_sfx(late_block_sound)
+	else:
+		SoundManager.play_sfx(hurt_sound)
 	current_state = State.HURT
 	knockback_velocity = knockback_dir
 	hurt_timer.start()
@@ -578,6 +600,7 @@ func _on_damaged(amount: int, knockback_dir: Vector2) -> void:
 	start_invincibility_flicker()
 
 func _on_perfectly_deflected(source: Node, attack_type: int) -> void:
+	SoundManager.play_sfx(perfect_deflect_sound)
 	flash_perfect_parry()
 	GameEffects.hit_stop(0.15, 0.02)
 	GameEffects.screen_shake(camera, 6.0, 0.15)
@@ -590,6 +613,7 @@ func _on_pogo_hit() -> void:
 	has_double_jumped = false
 
 func _on_died() -> void:
+	SoundManager.play_sfx(death_sound)
 	current_state = State.DEAD
 	hitbox_area.monitoring = false
 	down_hitbox_area.monitoring = false

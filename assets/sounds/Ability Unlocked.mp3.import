@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://gtgpitp2axor"
+path="res://.godot/imported/Ability Unlocked.mp3-3e0bdc6388457bbf17e0f128e6ed4f61.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/Ability Unlocked.mp3"
+dest_files=["res://.godot/imported/Ability Unlocked.mp3-3e0bdc6388457bbf17e0f128e6ed4f61.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

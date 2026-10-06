@@ -1,25 +1,11 @@
 [gd_scene format=3 uid="uid://c16starukv6wt"]
 
 [ext_resource type="Script" uid="uid://dabje27fnj7x0" path="res://scripts/save_point.gd" id="1_xvfwu"]
-[ext_resource type="Texture2D" uid="uid://bj0dacgwtqpif" path="res://assets/sprites/Multi_Platformer_Tileset_Free/Multi_Platformer_Tileset_Free/GrassLand/Props/GrassLand_ChoppedTree.png" id="2_wiums"]
+[ext_resource type="Texture2D" uid="uid://cqi2qsrprw414" path="res://assets/sprites/workbench save point.png" id="2_wiums"]
 [ext_resource type="FontFile" uid="uid://beowg2c3s24e" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="3_wiums"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4veiw"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_n0rt3"]
-atlas = ExtResource("2_wiums")
-region = Rect2(0, 0, 32, 16)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_4veiw"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_n0rt3")
-}],
-"loop": 1,
-"name": &"default",
-"speed": 5.0
-}]
+size = Vector2(29.5, 24.5)
 
 [node name="SavePoint" type="Area2D" unique_id=1774533503]
 scale = Vector2(2, 2)
@@ -29,16 +15,19 @@ script = ExtResource("1_xvfwu")
 save_point_id = "room_A_bench"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1671492288]
+position = Vector2(0.5, -4)
 shape = SubResource("RectangleShape2D_4veiw")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=210088373]
-sprite_frames = SubResource("SpriteFrames_4veiw")
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=369400027]
+position = Vector2(0, -10)
+scale = Vector2(0.50000006, 0.5582386)
+texture = ExtResource("2_wiums")
 
 [node name="Label" type="Label" parent="." unique_id=1546658791]
-offset_left = -28.5
-offset_top = -21.5
-offset_right = 29.5
-offset_bottom = -15.5
+offset_left = -29.0
+offset_top = -24.5
+offset_right = 29.0
+offset_bottom = -18.5
 theme_override_fonts/font = ExtResource("3_wiums")
 theme_override_font_sizes/font_size = 5
-text = "[/\\] INTERACT"
+text = "[↑] INTERACT"

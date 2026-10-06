@@ -2,6 +2,8 @@
 
 [ext_resource type="FontFile" uid="uid://vkql4h73ppav" path="res://assets/fonts/PixelOperator8.ttf" id="1_dj8aq"]
 [ext_resource type="Script" uid="uid://ba2ogr0ucax38" path="res://scripts/ui.gd" id="1_ro3t7"]
+[ext_resource type="AudioStream" uid="uid://s13vsv6vt5qg" path="res://assets/music/Overworld music.mp3" id="2_3wlde"]
+[ext_resource type="AudioStream" uid="uid://gtgpitp2axor" path="res://assets/sounds/Ability Unlocked.mp3" id="2_75u2n"]
 [ext_resource type="Script" uid="uid://iy3ph1et3f7f" path="res://scripts/transition_fade.gd" id="2_ua6yw"]
 [ext_resource type="FontFile" uid="uid://beowg2c3s24e" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="3_5en4g"]
 
@@ -33,6 +35,8 @@ bg_color = Color(0, 0.85490197, 0.19607843, 1)
 
 [node name="UI" type="CanvasLayer" unique_id=781763294]
 script = ExtResource("1_ro3t7")
+overworld_music = ExtResource("2_3wlde")
+ability_unlocked_sound = ExtResource("2_75u2n")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1822713232]
 visible = false

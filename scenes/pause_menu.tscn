@@ -36,7 +36,7 @@ offset_bottom = 720.0
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=915523557]
 layout_mode = 2
 theme_override_constants/margin_left = 2
-theme_override_constants/margin_top = 247
+theme_override_constants/margin_top = 265
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
@@ -68,17 +68,6 @@ theme = SubResource("Theme_7lxti")
 theme_override_fonts/font = ExtResource("2_myx47")
 text = "QUIT"
 
-[node name="MarginContainer4" type="MarginContainer" parent="VBoxContainer" unique_id=1571328867]
-layout_mode = 2
-theme_override_constants/margin_top = 10
-
-[node name="SettingsButton" type="Button" parent="VBoxContainer" unique_id=549034038]
-layout_mode = 2
-theme = SubResource("Theme_7lxti")
-theme_override_fonts/font = ExtResource("2_myx47")
-text = "SETTINGS"
-
 [connection signal="pressed" from="VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/MainMenuButton" to="." method="_on_main_menu_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/QuitButtonButton" to="." method="_on_quit_button_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
