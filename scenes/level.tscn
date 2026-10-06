@@ -1775,49 +1775,6 @@ size = Vector2(445.94647, 166)
 
 [node name="level" type="Node2D" unique_id=939043803]
 
-[node name="paralex" type="Node2D" parent="." unique_id=1787544877]
-z_index = -400
-
-[node name="Parallax2D" type="Parallax2D" parent="paralex" unique_id=1737238786]
-texture_filter = 1
-scale = Vector2(1.8, 1.8)
-scroll_scale = Vector2(0.2, 1)
-repeat_size = Vector2(400, 0)
-repeat_times = 500
-
-[node name="Sprite2D" type="Sprite2D" parent="paralex/Parallax2D" unique_id=260138785]
-texture = ExtResource("21_h6wmr")
-
-[node name="Parallax2D2" type="Parallax2D" parent="paralex" unique_id=1815922912]
-texture_filter = 1
-scale = Vector2(1.8, 1.8)
-scroll_scale = Vector2(0.3, 1)
-repeat_size = Vector2(400, 0)
-repeat_times = 500
-
-[node name="Sprite2D" type="Sprite2D" parent="paralex/Parallax2D2" unique_id=865600687]
-texture = ExtResource("2_pqd0y")
-
-[node name="Parallax2D3" type="Parallax2D" parent="paralex" unique_id=229716493]
-texture_filter = 1
-scale = Vector2(1.8, 1.8)
-scroll_scale = Vector2(0.4, 1)
-repeat_size = Vector2(400, 0)
-repeat_times = 900
-
-[node name="Sprite2D" type="Sprite2D" parent="paralex/Parallax2D3" unique_id=40056921]
-texture = ExtResource("3_5k0ak")
-
-[node name="Parallax2D4" type="Parallax2D" parent="paralex" unique_id=1944795]
-texture_filter = 1
-scale = Vector2(1.8, 1.8)
-scroll_scale = Vector2(0.5, 1)
-repeat_size = Vector2(400, 0)
-repeat_times = 400
-
-[node name="Sprite2D" type="Sprite2D" parent="paralex/Parallax2D4" unique_id=1837397415]
-texture = ExtResource("4_wu01b")
-
 [node name="Player" parent="." unique_id=1843453978 groups=["player"] instance=ExtResource("2_b121j")]
 position = Vector2(-31, 25)
 
@@ -2338,6 +2295,51 @@ door_group = "kraai_doors"
 position = Vector2(-739, 600)
 rotation = 1.5707964
 door_group = "kraai_doors"
+
+[node name="paralex" type="Node2D" parent="Room_BOSS" unique_id=1787544877]
+modulate = Color(0.55853254, 0.5573704, 0.6660333, 1)
+z_index = -400
+position = Vector2(0, -100)
+
+[node name="Parallax2D" type="Parallax2D" parent="Room_BOSS/paralex" unique_id=1737238786]
+texture_filter = 1
+scale = Vector2(1.8, 1.8)
+scroll_scale = Vector2(0.2, 1)
+repeat_size = Vector2(400, 176)
+repeat_times = 40
+
+[node name="Sprite2D" type="Sprite2D" parent="Room_BOSS/paralex/Parallax2D" unique_id=260138785]
+texture = ExtResource("21_h6wmr")
+
+[node name="Parallax2D3" type="Parallax2D" parent="Room_BOSS/paralex" unique_id=229716493]
+texture_filter = 1
+scale = Vector2(1.8, 1.8)
+scroll_scale = Vector2(0.4, 1)
+repeat_size = Vector2(400, 176)
+repeat_times = 40
+
+[node name="Sprite2D" type="Sprite2D" parent="Room_BOSS/paralex/Parallax2D3" unique_id=40056921]
+texture = ExtResource("3_5k0ak")
+
+[node name="Parallax2D4" type="Parallax2D" parent="Room_BOSS/paralex" unique_id=1944795]
+texture_filter = 1
+scale = Vector2(1.8, 1.8)
+scroll_scale = Vector2(0.5, 1)
+repeat_size = Vector2(400, 176)
+repeat_times = 40
+
+[node name="Sprite2D" type="Sprite2D" parent="Room_BOSS/paralex/Parallax2D4" unique_id=1837397415]
+texture = ExtResource("4_wu01b")
+
+[node name="Parallax2D2" type="Parallax2D" parent="Room_BOSS/paralex" unique_id=1815922912]
+texture_filter = 1
+scale = Vector2(1.8, 1.8)
+scroll_scale = Vector2(0.3, 1)
+repeat_size = Vector2(400, 176)
+repeat_times = 40
+
+[node name="Sprite2D" type="Sprite2D" parent="Room_BOSS/paralex/Parallax2D2" unique_id=865600687]
+texture = ExtResource("2_pqd0y")
 
 [connection signal="body_entered" from="Room_A/A_To_B_Transistion" to="Room_A/A_To_B_Transistion" method="_on_body_entered"]
 [connection signal="body_entered" from="Room_A/BlockLabelActivator" to="UI" method="_on_block_label_activator_body_entered"]
