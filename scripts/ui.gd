@@ -53,10 +53,11 @@ func _ready() -> void:
 	focus_bar.value = PlayerStats.current_focus
 	PlayerStats.focus_changed.connect(_on_focus_changed)
 	
+	
 	block_hint.visible = false
 	
 	controls_hint.visible = false
-	if SaveManager.last_save_point_id == "":
+	if SaveManager.last_save_point_id == "" or "room_A_bench":
 		show_controls_hint()
 
 func _on_player_healed(current: int) -> void:
@@ -143,4 +144,5 @@ func _process(_delta: float) -> void:
 
 
 func _on_block_label_activator_body_entered(body: Node2D) -> void:
-	show_block_hint()
+	if controls_hint.visible == false:
+		show_block_hint()

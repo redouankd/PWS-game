@@ -1,0 +1,122 @@
+[gd_scene format=3 uid="uid://yu5ypqnpdwga"]
+
+[ext_resource type="Script" uid="uid://dfqu0kvj21m3h" path="res://scripts/win_screen.gd" id="1_ulig0"]
+[ext_resource type="AudioStream" uid="uid://bu257rxnxua6v" path="res://assets/music/WinScreen.mp3" id="2_jrum5"]
+[ext_resource type="FontFile" uid="uid://beowg2c3s24e" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_okh34"]
+[ext_resource type="FontFile" uid="uid://vkql4h73ppav" path="res://assets/fonts/PixelOperator8.ttf" id="3_q8i45"]
+
+[sub_resource type="Theme" id="Theme_jrum5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4veiw"]
+bg_color = Color(0.31201848, 0.42702717, 0.8302722, 1)
+
+[node name="WinScreen" type="Control" unique_id=375378102]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ulig0")
+Win_screen = ExtResource("2_jrum5")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1733086810]
+modulate = Color(0, 0.012379295, 0.18771872, 0.38431373)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Celebration" type="Label" parent="." unique_id=2087178924]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -164.0
+offset_top = 43.0
+offset_right = 164.0
+offset_bottom = 90.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_okh34")
+theme_override_font_sizes/font_size = 46
+text = "You WIN!"
+horizontal_alignment = 1
+
+[node name="Credit" type="Label" parent="." unique_id=1996872213]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -598.0
+offset_top = 280.0
+offset_right = -158.0
+offset_bottom = 303.0
+grow_horizontal = 2
+rotation = -0.30543262
+theme_override_fonts/font = ExtResource("2_okh34")
+text = "Head programmer: Redouan Kada"
+horizontal_alignment = 1
+
+[node name="Credit2" type="Label" parent="." unique_id=1063466614]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 109.99994
+offset_top = 265.0
+offset_right = 550.0
+offset_bottom = 288.0
+grow_horizontal = 2
+rotation = 0.25307274
+theme_override_fonts/font = ExtResource("2_okh34")
+text = "Asset designer: Tygo Schouten"
+horizontal_alignment = 1
+
+[node name="Credit3" type="Label" parent="." unique_id=274606864]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -579.0
+offset_top = 431.00003
+offset_right = -138.99988
+offset_bottom = 454.00003
+grow_horizontal = 2
+rotation = 0.17627825
+theme_override_fonts/font = ExtResource("2_okh34")
+text = "Audio Producer: Kevin Vlieman"
+horizontal_alignment = 1
+
+[node name="Credit4" type="Label" parent="." unique_id=446098347]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -222.0
+offset_top = 370.0
+offset_right = 222.0
+offset_bottom = 393.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_okh34")
+text = "Thank you for playing our game!"
+horizontal_alignment = 1
+
+[node name="MainMenuButton" type="Button" parent="." unique_id=1125573315]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -137.0
+offset_top = 563.0
+offset_right = 137.0
+offset_bottom = 593.0
+grow_horizontal = 2
+theme = SubResource("Theme_jrum5")
+theme_override_colors/font_color = Color(1, 0.8750814, 0.8750814, 1)
+theme_override_fonts/font = ExtResource("3_q8i45")
+theme_override_styles/normal = SubResource("StyleBoxFlat_4veiw")
+text = "MAIN MENU"
+
+[connection signal="pressed" from="MainMenuButton" to="." method="_on_main_menu_button_pressed"]

@@ -110,6 +110,7 @@ func _ready():
 
 func _on_arena_body_entered(body: Node) -> void:
 	if body.is_in_group("player"):
+		SoundManager.play_music(phase1_music, 1.0)
 		ui.show_boss_bar()
 		await get_tree().create_timer(0.5).timeout
 		player_in_arena = true

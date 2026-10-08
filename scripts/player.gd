@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 signal player_died
 
+
 # ---------- CONSTANTS ----------
 const SPEED = 140.0
 const JUMP_VELOCITY = -330.0
@@ -143,10 +144,10 @@ func update_jump_timers(delta: float) -> void:
 
 	if Input.is_action_just_pressed("jump"):
 		jump_buffer_timer = JUMP_BUFFER_TIME
-		SoundManager.play_sfx(jump_sound)
+		
 	else:
 		jump_buffer_timer -= delta
-		SoundManager.play_sfx(jump_sound)
+		
 
 	if wall_jump_lockout_timer > 0:
 		wall_jump_lockout_timer -= delta
@@ -222,17 +223,24 @@ func handle_state_transitions() -> void:
 
 	if Input.is_action_pressed("block") and is_on_floor():
 		if current_state != State.BLOCK:
-			block_timer = 0.0
+			if Input.is_action_just_pressed("block"):
+				block_timer = 0.0
+				print("[BLOCK] Fresh press: perfect window started")
+			else:
+				block_timer = PERFECT_DEFLECT_WINDOW + 1.0
+				print("[BLOCK] Resumed while held: late block only")
+
 		current_state = State.BLOCK
 		return
 	elif current_state == State.BLOCK:
 		current_state = State.IDLE
-
+	
 	if current_state == State.WALL_CLING:
 		if jump_buffer_timer > 0:
 			velocity.x = WALL_JUMP_VELOCITY.x * -wall_direction
 			velocity.y = WALL_JUMP_VELOCITY.y
 			has_double_jumped = false
+			is_double_jumping = false
 			jump_buffer_timer = 0
 			wall_jump_lockout_timer = WALL_JUMP_LOCKOUT
 			wall_jump_control_timer = WALL_JUMP_CONTROL_LOCK
@@ -276,6 +284,7 @@ func handle_state_transitions() -> void:
 
 	if jump_buffer_timer > 0:
 		if is_on_floor() or coyote_timer > 0:
+			SoundManager.play_sfx(jump_sound)
 			velocity.y = JUMP_VELOCITY
 			coyote_timer = 0
 			jump_buffer_timer = 0
@@ -283,6 +292,7 @@ func handle_state_transitions() -> void:
 			current_state = State.JUMP
 			return
 		elif PlayerStats.has_ability("double_jump") and not has_double_jumped:
+			SoundManager.play_sfx(jump_sound)
 			velocity.y = JUMP_VELOCITY
 			has_double_jumped = true
 			jump_buffer_timer = 0
@@ -353,6 +363,11 @@ func run_current_state(delta: float) -> void:
 		State.BLOCK:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 			block_timer += delta
+			
+			if block_timer <= PERFECT_DEFLECT_WINDOW:
+				print("[BLOCK] PERFECT window | Time: %.3f s" % block_timer)
+			else:
+				print("[BLOCK] LATE block | Time: %.3f s" % block_timer)
 
 		State.HEAL:
 			velocity.x = 0
@@ -434,9 +449,10 @@ func face_direction(direction: float) -> void:
 
 
 func start_dash() -> void:
-	current_state = State.DASH
 	SoundManager.play_sfx(dash_sound)
+	current_state = State.DASH
 	can_dash = false
+	is_double_jumping = false
 	dash_direction = -1 if animated_sprite.flip_h else 1
 	dash_timer.start()
 	dash_cooldown_timer.start()
@@ -600,6 +616,7 @@ func _on_damaged(amount: int, knockback_dir: Vector2) -> void:
 	start_invincibility_flicker()
 
 func _on_perfectly_deflected(source: Node, attack_type: int) -> void:
+	
 	SoundManager.play_sfx(perfect_deflect_sound)
 	flash_perfect_parry()
 	GameEffects.hit_stop(0.15, 0.02)
@@ -611,6 +628,9 @@ func _on_pogo_hit() -> void:
 	velocity.y = bounce
 	current_state = State.JUMP
 	has_double_jumped = false
+	has_air_dashed = false
+	can_dash = true
+	dash_cooldown_timer.stop()
 
 func _on_died() -> void:
 	SoundManager.play_sfx(death_sound)
