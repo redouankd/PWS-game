@@ -182,7 +182,7 @@ func apply_stun(duration: float) -> void:
 	current_state = State.HURT
 	if player_ref != null:
 		var direction_away = (global_position - player_ref.global_position).normalized()
-		knockback_velocity = direction_away * 100.0
+		knockback_velocity = direction_away * 150.0
 	else:
 		knockback_velocity = Vector2.ZERO
 	hurt_timer.wait_time = duration

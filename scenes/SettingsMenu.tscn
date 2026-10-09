@@ -21,7 +21,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer" unique_id=682066072]
+layout_mode = 2
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_bottom = 100
 
 [node name="Settings" type="Label" parent="VBoxContainer" unique_id=1638061185]
 layout_mode = 2
@@ -32,7 +36,8 @@ horizontal_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=852064658]
 layout_mode = 2
-theme_override_constants/margin_bottom = 232
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_bottom = 142
 
 [node name="Master Volume" type="Label" parent="VBoxContainer" unique_id=821445225]
 layout_mode = 2
@@ -74,13 +79,27 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("2_1yw23")
 text = "Fullscreen"
 
-[node name="BackButton" type="Button" parent="VBoxContainer" unique_id=26504274]
+[node name="Controlbutton" type="Button" parent="VBoxContainer" unique_id=26504274]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_1yw23")
+text = "Controls
+"
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer" unique_id=1872426068]
+layout_mode = 2
+theme_override_constants/margin_bottom = 8
+
+[node name="BackButton" type="Button" parent="VBoxContainer" unique_id=783806073]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_1yw23")
 text = "Back"
 
-[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer" unique_id=220691808]
-layout_mode = 2
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/BackButton" unique_id=220691808]
+layout_mode = 0
+offset_top = 28.0
+offset_right = 1280.0
+offset_bottom = 406.0
 theme_override_constants/margin_bottom = 189
 
+[connection signal="pressed" from="VBoxContainer/Controlbutton" to="." method="_on_controlbutton_pressed"]
 [connection signal="pressed" from="VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

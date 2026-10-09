@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://ca1qo61dcdujm" path="res://scenes/FlyingBot.tscn" id="8_82cfe"]
 [ext_resource type="PackedScene" uid="uid://bvble6gockjw4" path="res://scenes/UI.tscn" id="8_b121j"]
 [ext_resource type="Texture2D" uid="uid://d3gpp04p1ot2w" path="res://assets/sprites/Tileset cables 1 (1).png" id="8_gunhw"]
-[ext_resource type="Script" uid="uid://dld51fst1hnbt" path="res://scripts/dubble_jump_pickup.gd" id="9_8c41q"]
+[ext_resource type="Script" uid="uid://dld51fst1hnbt" path="res://scripts/pickup.gd" id="9_8c41q"]
 [ext_resource type="Texture2D" uid="uid://l3pepj1rjptf" path="res://assets/sprites/coin.png" id="10_olg7q"]
 [ext_resource type="FontFile" uid="uid://beowg2c3s24e" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="13_7agi7"]
 [ext_resource type="Texture2D" uid="uid://bi4dq1n0nj26o" path="res://assets/sprites/Multi_Platformer_Tileset_Free/Multi_Platformer_Tileset_Free/GrassLand/Terrain/Grassland_Terrain_47Tiles.png" id="13_64w2a"]
@@ -2532,7 +2532,7 @@ frame_progress = 0.1219011
 [node name="paralex" type="Node2D" parent="." unique_id=1787544877]
 modulate = Color(0.5568628, 0.5568628, 0.6666667, 1)
 z_index = -400
-position = Vector2(0, -100)
+position = Vector2(899, 802)
 
 [node name="Parallax2D" type="Parallax2D" parent="paralex" unique_id=1737238786]
 modulate = Color(0.5568628, 0.5568628, 0.6666667, 1)
@@ -2540,7 +2540,7 @@ texture_filter = 1
 scale = Vector2(1.2, 1.2)
 scroll_scale = Vector2(0.2, 1)
 repeat_size = Vector2(400, 176)
-repeat_times = 40
+repeat_times = 15
 
 [node name="Sprite2D" type="Sprite2D" parent="paralex/Parallax2D" unique_id=260138785]
 texture = ExtResource("21_h6wmr")
@@ -2550,7 +2550,7 @@ texture_filter = 1
 scale = Vector2(1.2, 1.2)
 scroll_scale = Vector2(0.3, 1)
 repeat_size = Vector2(400, 176)
-repeat_times = 40
+repeat_times = 15
 
 [node name="Sprite2D" type="Sprite2D" parent="paralex/Parallax2D3" unique_id=40056921]
 texture = ExtResource("3_5k0ak")
@@ -2560,7 +2560,7 @@ texture_filter = 1
 scale = Vector2(1.2, 1.2)
 scroll_scale = Vector2(0.4, 1)
 repeat_size = Vector2(400, 176)
-repeat_times = 40
+repeat_times = 15
 
 [node name="Sprite2D" type="Sprite2D" parent="paralex/Parallax2D4" unique_id=1837397415]
 texture = ExtResource("4_wu01b")
@@ -2571,7 +2571,7 @@ texture_filter = 1
 scale = Vector2(1.2, 1.2)
 scroll_scale = Vector2(0.5, 1)
 repeat_size = Vector2(400, 176)
-repeat_times = 40
+repeat_times = 15
 
 [node name="Sprite2D" type="Sprite2D" parent="paralex/Parallax2D2" unique_id=865600687]
 texture = ExtResource("2_pqd0y")
