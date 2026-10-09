@@ -71,7 +71,7 @@ theme_override_constants/margin_bottom = 43
 
 [node name="Label" type="Label" parent="VBoxContainer" unique_id=411198153]
 layout_mode = 2
-text = "Sorrow Cloaks"
+text = "Cloak dive"
 label_settings = SubResource("LabelSettings_4veiw")
 horizontal_alignment = 1
 

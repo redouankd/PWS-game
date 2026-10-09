@@ -2065,9 +2065,6 @@ text = "[↑]Enter sewer?"
 position = Vector2(0, -1)
 sprite_frames = SubResource("SpriteFrames_t5jri")
 
-[node name="purple_slime3" parent="Room_B" unique_id=7764076 instance=ExtResource("14_arp2o")]
-position = Vector2(2134, 591)
-
 [node name="FlyingBot" parent="Room_B" unique_id=1636658998 instance=ExtResource("8_82cfe")]
 position = Vector2(1932, 494)
 projectile_speed = 250.0
@@ -2430,6 +2427,7 @@ enabled = false
 zoom = Vector2(2.5, 2.9)
 
 [node name="boss_cam_activator" type="Area2D" parent="Room_BOSS" unique_id=1382938780]
+visible = false
 position = Vector2(-500, 536)
 collision_mask = 3
 script = ExtResource("5_t1rx8")
@@ -2464,6 +2462,7 @@ position = Vector2(-293, 611)
 position = Vector2(-298, 476)
 
 [node name="ArenaBounds" type="Area2D" parent="Room_BOSS" unique_id=168473843]
+visible = false
 position = Vector2(-500, 536)
 scale = Vector2(1.05, 1.05)
 collision_layer = 32

@@ -22,24 +22,41 @@ theme_override_font_sizes/font_size = 116
 text = "Controls"
 horizontal_alignment = 1
 
-[node name="Label" type="Label" parent="." unique_id=1123837455]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1156423387]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "[Left][Right] Move  
-[Space] Jump  
-[X + arrowkey] Attack
-[UP] Interact 
-[P] Pause
-[C] Block
-[A] Heal
-[z/shift] dash
-"
+
+[node name="ActionList" type="VBoxContainer" parent="ScrollContainer" unique_id=279912423]
+layout_mode = 2
+
+[node name="RebindPrompt" type="Label" parent="." unique_id=760571066]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -198.0
+offset_top = -203.0
+offset_right = 200.0
+offset_bottom = -176.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "GG fricking ez"
 horizontal_alignment = 1
-vertical_alignment = 1
+
+[node name="Reset" type="Button" parent="." unique_id=273310551]
+layout_mode = 0
+offset_left = 740.0
+offset_top = 482.0
+offset_right = 820.0
+offset_bottom = 546.0
+text = "fricking ez"
 
 [node name="Button" type="Button" parent="." unique_id=1408261551]
 layout_mode = 1
@@ -56,4 +73,5 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Back to settings"
 
+[connection signal="pressed" from="Reset" to="." method="_on_reset_pressed"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

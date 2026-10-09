@@ -137,7 +137,7 @@ offset_right = 248.0
 offset_bottom = -54.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "[←][→] Move    [Space] Jump    [X] Attack    [↑] Interact    [Esc] Pause"
+text = "[Left][Right] Move    [Space] Jump    [X] Attack    [UP] Interact    [P] Pause [A] Heal"
 
 [node name="BlockHint" type="Label" parent="." unique_id=531811741]
 anchors_preset = 7
